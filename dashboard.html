@@ -39,57 +39,134 @@
 </header>
 
 <main class="flex-grow max-w-7xl mx-auto w-full px-space-lg md:px-margin py-space-xl">
-  <div class="mb-space-lg">
-    <h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Welcome, <span id="welcome-name">...</span></h1>
-    <p class="font-body-md text-body-md text-on-surface-variant">Here's your PeerXchange activity at a glance.</p>
-  </div>
+  <section class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pb-space-lg border-b border-outline-variant mb-space-lg">
+    <div>
+      <h1 class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight">Welcome, <span id="welcome-name">...</span></h1>
+      <p class="font-body-md text-body-md text-on-surface-variant mt-1">Here's your PeerXchange activity at a glance.</p>
+    </div>
+    <a href="browse.html" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-sm hover:bg-primary-container active:scale-[0.98] transition-all">
+      <span class="material-symbols-outlined text-lg">add_circle</span>
+      <span>Request New Session</span>
+    </a>
+  </section>
 
-  <div class="grid grid-cols-2 lg:grid-cols-4 gap-space-md mb-space-xl">
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg text-center">
-      <p class="font-headline-lg text-headline-lg font-bold text-primary" id="stat-pending">0</p>
-      <p class="font-body-sm text-body-sm text-on-surface-variant">Pending Requests</p>
+  <section class="grid grid-cols-2 lg:grid-cols-4 gap-space-md mb-space-xl">
+    <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
+      <div class="flex items-start justify-between mb-space-sm">
+        <span class="font-label-md text-label-md text-secondary">Pending</span>
+        <span class="p-1.5 bg-surface-container-low text-primary rounded-lg"><span class="material-symbols-outlined text-lg">inbox</span></span>
+      </div>
+      <p class="font-headline-lg text-headline-lg font-bold text-on-surface" id="stat-pending">0</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">Requests awaiting your reply</p>
     </div>
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg text-center">
-      <p class="font-headline-lg text-headline-lg font-bold text-primary" id="stat-sent">0</p>
-      <p class="font-body-sm text-body-sm text-on-surface-variant">Requests Sent</p>
+    <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
+      <div class="flex items-start justify-between mb-space-sm">
+        <span class="font-label-md text-label-md text-secondary">Sent</span>
+        <span class="p-1.5 bg-surface-container-low text-secondary rounded-lg"><span class="material-symbols-outlined text-lg">send</span></span>
+      </div>
+      <p class="font-headline-lg text-headline-lg font-bold text-on-surface" id="stat-sent">0</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">Requests you've made</p>
     </div>
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg text-center">
-      <p class="font-headline-lg text-headline-lg font-bold text-primary" id="stat-completed">0</p>
-      <p class="font-body-sm text-body-sm text-on-surface-variant">Sessions Completed</p>
+    <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
+      <div class="flex items-start justify-between mb-space-sm">
+        <span class="font-label-md text-label-md text-secondary">Completed</span>
+        <span class="p-1.5 bg-surface-container-low text-status-completed rounded-lg"><span class="material-symbols-outlined text-lg">verified</span></span>
+      </div>
+      <p class="font-headline-lg text-headline-lg font-bold text-on-surface" id="stat-completed">0</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">Sessions you've hosted</p>
     </div>
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg text-center">
-      <p class="font-headline-lg text-headline-lg font-bold text-primary" id="stat-rating">—</p>
-      <p class="font-body-sm text-body-sm text-on-surface-variant">Average Rating</p>
+    <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
+      <div class="flex items-start justify-between mb-space-sm">
+        <span class="font-label-md text-label-md text-secondary">Rating</span>
+        <span class="p-1.5 bg-surface-container-low text-status-pending rounded-lg"><span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">grade</span></span>
+      </div>
+      <p class="font-headline-lg text-headline-lg font-bold text-on-surface" id="stat-rating">—</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">Average from completed sessions</p>
     </div>
-  </div>
+  </section>
 
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-space-lg mb-space-lg">
-    <div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
-      <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-sm">About you</h3>
-      <p class="font-body-md text-body-md text-on-surface-variant" id="bio-text">...</p>
-    </div>
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
-      <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-sm">Quick links</h3>
-      <div class="space-y-2">
-        <a href="browse.html" class="flex items-center gap-2 font-label-md text-label-md text-primary hover:text-primary-container"><span class="material-symbols-outlined text-[18px]">search</span>Browse peers to learn from</a>
-        <a href="requests.html" class="flex items-center gap-2 font-label-md text-label-md text-primary hover:text-primary-container"><span class="material-symbols-outlined text-[18px]">inbox</span>View your requests</a>
-        <a href="profile.html" class="flex items-center gap-2 font-label-md text-label-md text-primary hover:text-primary-container"><span class="material-symbols-outlined text-[18px]">edit</span>Edit your profile</a>
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+    <div class="lg:col-span-7 flex flex-col gap-space-lg">
+      <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
+        <div class="flex items-center gap-space-md pb-space-md border-b border-outline-variant">
+          <div class="w-14 h-14 rounded-full bg-tag-teach-bg border border-outline-variant flex items-center justify-center font-headline-sm text-headline-sm font-bold text-tag-teach-text" id="avatar-initials">--</div>
+          <div>
+            <h2 class="font-headline-sm text-headline-sm font-bold text-on-surface" id="profile-name">...</h2>
+            <a href="profile.html" class="inline-flex items-center gap-1 font-label-sm text-label-sm text-primary hover:text-primary-container transition-colors">
+              <span class="material-symbols-outlined text-sm">edit</span>Edit Profile
+            </a>
+          </div>
+        </div>
+        <div class="mt-space-md">
+          <h3 class="font-label-md text-label-md text-secondary uppercase tracking-wider text-[11px]">Bio</h3>
+          <p class="font-body-md text-body-md text-on-surface mt-1.5 leading-relaxed bg-surface-container-low p-space-md rounded-lg border border-outline-variant" id="bio-text">...</p>
+        </div>
+        <div class="mt-space-lg space-y-space-md">
+          <div>
+            <p class="font-label-md text-label-md text-tag-teach-text flex items-center gap-1.5 mb-2">
+              <span class="material-symbols-outlined text-base">north_east</span>Skills you can teach
+            </p>
+            <div class="flex flex-wrap gap-2" id="teach-tags"></div>
+          </div>
+          <div class="pt-space-sm border-t border-outline-variant">
+            <p class="font-label-md text-label-md text-tag-learn-text flex items-center gap-1.5 mb-2">
+              <span class="material-symbols-outlined text-base">south_west</span>Skills you want to learn
+            </p>
+            <div class="flex flex-wrap gap-2" id="learn-tags"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-space-md">
+        <a href="browse.html" class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg flex flex-col justify-between group">
+          <div>
+            <div class="p-2 w-fit rounded-lg bg-surface-container-low text-primary mb-3 group-hover:bg-primary-fixed transition-colors">
+              <span class="material-symbols-outlined text-2xl">travel_explore</span>
+            </div>
+            <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface group-hover:text-primary transition-colors">Browse Peers</h3>
+            <p class="font-body-sm text-body-sm text-secondary mt-1">Find someone who teaches what you want to learn.</p>
+          </div>
+          <div class="mt-space-md flex items-center font-label-md text-label-md text-primary gap-1">
+            <span>Find matches</span><span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </div>
+        </a>
+        <a href="requests.html" class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg flex flex-col justify-between group">
+          <div>
+            <div class="p-2 w-fit rounded-lg bg-status-pending-bg text-status-pending mb-3 group-hover:bg-primary-fixed transition-colors">
+              <span class="material-symbols-outlined text-2xl">mark_email_unread</span>
+            </div>
+            <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface group-hover:text-primary transition-colors">Manage Requests</h3>
+            <p class="font-body-sm text-body-sm text-secondary mt-1">Review, accept, or track your session requests.</p>
+          </div>
+          <div class="mt-space-md flex items-center font-label-md text-label-md text-primary gap-1">
+            <span>View queue</span><span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </div>
+        </a>
+        <a href="profile.html" class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg flex flex-col justify-between group">
+          <div>
+            <div class="p-2 w-fit rounded-lg bg-surface-container-low text-secondary mb-3 group-hover:bg-primary-fixed transition-colors">
+              <span class="material-symbols-outlined text-2xl">badge</span>
+            </div>
+            <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface group-hover:text-primary transition-colors">Public Profile</h3>
+            <p class="font-body-sm text-body-sm text-secondary mt-1">Update your bio and the skills you list.</p>
+          </div>
+          <div class="mt-space-md flex items-center font-label-md text-label-md text-primary gap-1">
+            <span>Customize</span><span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </div>
+        </a>
       </div>
     </div>
-  </div>
 
-  <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
-    <div class="mb-space-md">
-      <p class="font-label-sm text-label-sm text-on-primary-fixed-variant font-bold uppercase tracking-wider mb-2 flex items-center gap-1">
-        <span class="material-symbols-outlined text-[16px]">north_east</span>You can teach
-      </p>
-      <div class="flex flex-wrap gap-2" id="teach-tags"></div>
-    </div>
-    <div>
-      <p class="font-label-sm text-label-sm text-tag-learn-text font-bold uppercase tracking-wider mb-2 flex items-center gap-1">
-        <span class="material-symbols-outlined text-[16px]">south_west</span>You want to learn
-      </p>
-      <div class="flex flex-wrap gap-2" id="learn-tags"></div>
+    <div class="lg:col-span-5">
+      <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
+        <div class="flex items-center gap-2 pb-space-sm border-b border-outline-variant mb-space-md">
+          <span class="material-symbols-outlined text-primary text-xl">inbox</span>
+          <h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">Latest Received Requests</h2>
+        </div>
+        <div id="recent-received-list" class="space-y-space-md"></div>
+        <p id="recent-received-empty" class="hidden text-center text-on-surface-variant font-body-sm py-space-lg">No one has requested a session with you yet.</p>
+        <a href="requests.html" class="mt-space-md inline-flex items-center gap-1 font-label-sm text-label-sm text-primary hover:underline">View all requests <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+      </div>
     </div>
   </div>
 </main>
