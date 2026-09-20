@@ -95,6 +95,21 @@ If you ever need to point this at a different Supabase project, run the SQL in
 No environment variables or build step are required since the Supabase
 anon key is already embedded in `js/config.js`.
 
+## Verifying the security model
+
+`supabase/rls_tests.sql` is an automated test suite that proves the Row Level
+Security policies and triggers in `schema.sql` actually behave as designed —
+it acts as several different (throwaway) users inside Postgres and checks
+that every permission boundary holds (e.g. a user can't update someone else's
+profile, can't grant themselves admin, can't accept their own session
+request, can't rate a session that isn't completed, and so on).
+
+Run it in the Supabase SQL editor. It runs inside a transaction that always
+ends in `ROLLBACK`, so it's safe to re-run at any time — it never leaves test
+data behind. If every rule holds, it completes with no error; if one is
+broken, it stops immediately with a message naming exactly which check
+failed.
+
 ## Notes for the viva
 
 - Auth, data storage, and access control all run through Supabase — there is
