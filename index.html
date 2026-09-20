@@ -27,35 +27,40 @@
       </a>
     </div>
 
-    <div class="flex items-center gap-1">
-      <select id="lang-switcher" class="bg-transparent border border-outline-variant rounded-lg text-label-sm font-label-sm text-on-surface px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary">
-        <option value="en">English</option>
-        <option value="hi">हिन्दी</option>
-        <option value="es">Español</option>
-      </select>
-      <button id="theme-toggle" class="text-on-surface hover:bg-surface-container-low rounded-lg p-2 transition-colors" aria-label="Toggle dark mode" type="button">
-        <span class="material-symbols-outlined theme-icon text-2xl">dark_mode</span>
+    <div class="flex items-center gap-space-lg">
+      <nav class="hidden md:flex items-center space-x-space-lg">
+        <a class="font-label-md text-label-md text-secondary hover:text-on-surface transition-colors duration-150 py-1" href="#how-it-works" data-i18n="nav.howItWorks">How it works</a>
+      </nav>
+
+      <ul id="nav-links" class="hidden md:flex items-center gap-space-sm">
+        <li class="nav-guest-only"><a class="hidden sm:inline-flex items-center px-space-md py-2 border border-outline rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-all duration-200 active:scale-[0.98]" href="login.html" data-i18n="nav.login">Log In</a></li>
+        <li class="nav-guest-only"><a class="inline-flex items-center gap-space-xs px-space-md py-2 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-md text-label-md transition-all duration-200 active:scale-[0.98] shadow-sm" href="register.html"><span data-i18n="nav.signup">Get Started</span><span class="material-symbols-outlined text-base">arrow_forward</span></a></li>
+        <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a></li>
+        <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="browse.html" data-i18n="nav.browse">Browse</a></li>
+        <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="requests.html" data-i18n="nav.requests">Requests</a></li>
+        <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="profile.html" data-i18n="nav.profile">Profile</a></li>
+        <li class="nav-admin-only hidden"><a class="font-label-md text-label-md text-primary font-bold" href="admin.html" data-i18n="nav.admin">Admin</a></li>
+        <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="#" id="logout-btn">Logout (<span id="nav-user-name"></span>)</a></li>
+      </ul>
+
+      <div class="flex items-center gap-1">
+        <select id="lang-switcher" class="bg-transparent border border-outline-variant rounded-lg text-label-sm font-label-sm text-on-surface pl-2 pr-7 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary">
+          <option value="en">English</option>
+          <option value="hi">हिन्दी</option>
+          <option value="bn">বাংলা</option>
+          <option value="pa">ਪੰਜਾਬੀ</option>
+          <option value="mr">मराठी</option>
+          <option value="ta">தமிழ்</option>
+        </select>
+        <button id="theme-toggle" class="text-on-surface hover:bg-surface-container-low rounded-lg p-2 transition-colors" aria-label="Toggle dark mode" type="button">
+          <span class="material-symbols-outlined theme-icon text-2xl">dark_mode</span>
+        </button>
+      </div>
+
+      <button id="menu-toggle" class="md:hidden text-on-surface" aria-label="Toggle menu">
+        <span class="material-symbols-outlined text-3xl">menu</span>
       </button>
     </div>
-
-    <button id="menu-toggle" class="md:hidden text-on-surface" aria-label="Toggle menu">
-      <span class="material-symbols-outlined text-3xl">menu</span>
-    </button>
-
-    <nav class="hidden md:flex items-center space-x-space-lg">
-      <a class="font-label-md text-label-md text-secondary hover:text-on-surface transition-colors duration-150 py-1" href="#how-it-works" data-i18n="nav.howItWorks">How it works</a>
-    </nav>
-
-    <ul id="nav-links" class="hidden md:flex items-center gap-space-sm">
-      <li class="nav-guest-only"><a class="hidden sm:inline-flex items-center px-space-md py-2 border border-outline rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-all duration-200 active:scale-[0.98]" href="login.html" data-i18n="nav.login">Log In</a></li>
-      <li class="nav-guest-only"><a class="inline-flex items-center gap-space-xs px-space-md py-2 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-md text-label-md transition-all duration-200 active:scale-[0.98] shadow-sm" href="register.html"><span data-i18n="nav.signup">Get Started</span><span class="material-symbols-outlined text-base">arrow_forward</span></a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="browse.html" data-i18n="nav.browse">Browse</a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="requests.html" data-i18n="nav.requests">Requests</a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="profile.html" data-i18n="nav.profile">Profile</a></li>
-      <li class="nav-admin-only hidden"><a class="font-label-md text-label-md text-primary font-bold" href="admin.html" data-i18n="nav.admin">Admin</a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="#" id="logout-btn">Logout (<span id="nav-user-name"></span>)</a></li>
-    </ul>
   </div>
 </header>
 
