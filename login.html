@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Log In — PeerXchange</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="js/tailwind-config.js"></script>
+<link rel="stylesheet" href="css/extra.css"/>
+</head>
+<body class="bg-background text-on-surface font-body-md text-body-md min-h-screen flex flex-col justify-between selection:bg-primary-fixed selection:text-on-primary-fixed">
+
+<header class="w-full bg-surface-container-lowest border-b border-outline-variant">
+  <div class="max-w-7xl mx-auto px-space-lg md:px-margin h-16 flex items-center justify-between">
+    <a class="flex items-center gap-space-sm group" href="index.html">
+      <span class="w-9 h-9 rounded-lg bg-primary text-on-primary flex items-center justify-center font-headline-md text-headline-md font-bold transition-transform duration-200 group-hover:scale-105">P</span>
+      <span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">PeerXchange</span>
+    </a>
+    <a class="inline-flex items-center gap-space-xs font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-150 py-1.5 px-3 rounded-lg hover:bg-surface-container-low" href="index.html">
+      <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+      <span>Back to Home</span>
+    </a>
+  </div>
+</header>
+
+<main class="flex-grow flex items-center justify-center px-space-md py-space-xl sm:px-space-lg">
+  <div class="w-full max-w-[480px]">
+    <div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-space-lg md:p-space-xl warm-glow transition-all duration-200">
+      <div class="text-center mb-space-lg">
+        <div class="inline-flex items-center gap-space-xs bg-surface-container-low text-on-surface-variant px-3 py-1 rounded-full border border-outline-variant mb-space-md">
+          <span class="w-2 h-2 rounded-full bg-primary pulse-dot"></span>
+          <span class="font-label-sm text-label-sm font-semibold tracking-wide">Student Authentication</span>
+        </div>
+        <h1 class="font-headline-md text-headline-md text-on-surface font-bold tracking-tight">Welcome back to PeerXchange</h1>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-1.5">Enter your credentials to manage your learning exchanges</p>
+      </div>
+
+      <div id="login-error-banner" class="hidden mb-space-lg bg-error-container text-on-error-container border-l-4 border-error p-space-md rounded-lg flex items-start gap-space-sm" role="alert">
+        <span class="material-symbols-outlined text-error mt-0.5 flex-shrink-0">error</span>
+        <div class="text-left">
+          <p class="font-label-md text-label-md font-bold text-on-error-container">Authentication failed</p>
+          <p id="login-error-text" class="font-body-sm text-body-sm text-on-error-container mt-0.5"></p>
+        </div>
+      </div>
+
+      <form class="space-y-space-md" id="login-form">
+        <div class="space-y-1.5 text-left">
+          <label class="block font-label-md text-label-md text-on-surface" for="email">Email</label>
+          <div class="relative rounded-lg shadow-sm">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+              <span class="material-symbols-outlined text-[20px]">mail</span>
+            </div>
+            <input class="block w-full pl-10 pr-3 py-2.5 bg-surface-container-lowest text-on-surface placeholder-outline border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary font-body-md text-body-md transition-colors" id="email" name="email" placeholder="you@example.com" required type="email"/>
+          </div>
+        </div>
+
+        <div class="space-y-1.5 text-left">
+          <label class="block font-label-md text-label-md text-on-surface" for="password">Password</label>
+          <div class="relative rounded-lg shadow-sm">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+              <span class="material-symbols-outlined text-[20px]">lock</span>
+            </div>
+            <input class="block w-full pl-10 pr-3 py-2.5 bg-surface-container-lowest text-on-surface placeholder-outline border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary font-body-md text-body-md transition-colors" id="password" name="password" placeholder="••••••••" required type="password"/>
+          </div>
+        </div>
+
+        <button class="w-full mt-2 py-3 px-space-md rounded-lg bg-primary hover:bg-primary-container active:scale-[0.99] text-on-primary font-label-md text-label-md tracking-wide transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:shadow" type="submit">
+          <span>Log In</span>
+          <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+        </button>
+      </form>
+
+      <div class="mt-space-lg pt-space-md border-t border-outline-variant flex items-center justify-center gap-2 text-center text-on-surface-variant">
+        <span class="material-symbols-outlined text-status-active text-[18px]">verified_user</span>
+        <span class="font-body-sm text-body-sm text-on-surface-variant">Your data is protected by row-level security</span>
+      </div>
+    </div>
+
+    <div class="mt-space-md text-center bg-surface-container rounded-lg p-space-md border border-outline-variant">
+      <p class="font-body-sm text-body-sm text-on-surface-variant">
+        New to PeerXchange?
+        <a class="font-label-md text-label-md text-primary hover:text-primary-container font-semibold ml-1 underline decoration-primary-fixed decoration-2 underline-offset-2 hover:decoration-primary transition-all" href="register.html">
+          Create an account
+        </a>
+      </p>
+    </div>
+  </div>
+</main>
+
+<footer class="w-full bg-surface-container border-t border-outline-variant">
+  <div class="max-w-7xl mx-auto px-space-lg md:px-margin py-space-lg flex flex-col md:flex-row justify-between items-center gap-4">
+    <span class="font-body-sm text-body-sm text-on-surface-variant">© 2026 PeerXchange. Student Skill Exchange / Peer Tutoring Marketplace.</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/login.js"></script>
+</body>
+</html>

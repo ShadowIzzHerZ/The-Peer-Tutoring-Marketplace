@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PeerXchange | Student Skill Exchange Network</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="js/tailwind-config.js"></script>
+<link rel="stylesheet" href="css/extra.css"/>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed min-h-screen flex flex-col antialiased">
+
+<header class="sticky top-0 z-50 bg-surface-container-lowest border-b border-outline-variant transition-colors">
+  <div class="flex justify-between items-center w-full px-space-lg md:px-margin max-w-7xl mx-auto h-16">
+    <div class="flex items-center gap-space-sm">
+      <a class="flex items-center gap-space-sm group" href="index.html">
+        <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary shadow-sm group-hover:bg-primary-container transition-colors duration-150">
+          <span class="material-symbols-outlined text-2xl">swap_horizontal_circle</span>
+        </div>
+        <span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">PeerXchange</span>
+      </a>
+    </div>
+
+    <button id="menu-toggle" class="md:hidden text-on-surface" aria-label="Toggle menu">
+      <span class="material-symbols-outlined text-3xl">menu</span>
+    </button>
+
+    <nav class="hidden md:flex items-center space-x-space-lg">
+      <a class="font-label-md text-label-md text-secondary hover:text-on-surface transition-colors duration-150 py-1" href="#how-it-works">How it works</a>
+    </nav>
+
+    <ul id="nav-links" class="hidden md:flex items-center gap-space-sm">
+      <li class="nav-guest-only"><a class="hidden sm:inline-flex items-center px-space-md py-2 border border-outline rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-all duration-200 active:scale-[0.98]" href="login.html">Log In</a></li>
+      <li class="nav-guest-only"><a class="inline-flex items-center gap-space-xs px-space-md py-2 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-md text-label-md transition-all duration-200 active:scale-[0.98] shadow-sm" href="register.html"><span>Get Started</span><span class="material-symbols-outlined text-base">arrow_forward</span></a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="dashboard.html">Dashboard</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="browse.html">Browse</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="requests.html">Requests</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="profile.html">Profile</a></li>
+      <li class="nav-admin-only hidden"><a class="font-label-md text-label-md text-primary font-bold" href="admin.html">Admin</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="#" id="logout-btn">Logout (<span id="nav-user-name"></span>)</a></li>
+    </ul>
+  </div>
+</header>
+
+<main class="flex-grow">
+  <section class="relative pt-space-xl pb-space-2xl md:pt-20 md:pb-24 overflow-hidden">
+    <div class="absolute inset-0 -z-10 opacity-40 pointer-events-none" style="background-image: radial-gradient(#dfc0b7 1px, transparent 1px); background-size: 32px 32px;"></div>
+    <div class="max-w-7xl mx-auto px-space-lg md:px-margin">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-center">
+        <div class="lg:col-span-7 flex flex-col items-start text-left">
+          <div class="inline-flex items-center gap-space-sm px-space-sm py-1 rounded-full bg-surface-container-high border border-outline-variant mb-space-md">
+            <span class="w-2 h-2 rounded-full bg-status-active pulse-dot"></span>
+            <span class="font-label-sm text-label-sm text-on-surface-variant font-semibold">Peer Learning Commons • Free for all students</span>
+          </div>
+          <h1 class="hidden md:block font-headline-hero text-headline-hero text-on-surface mb-space-md tracking-tight">
+            Exchange skills. <br/>
+            <span class="text-primary">Master new subjects.</span> <br/>
+            Free with peers.
+          </h1>
+          <h1 class="block md:hidden font-headline-hero-mobile text-headline-hero-mobile text-on-surface mb-space-md tracking-tight">
+            Exchange skills. <br/>
+            <span class="text-primary">Master new subjects.</span> <br/>
+            Free with peers.
+          </h1>
+          <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mb-space-xl">
+            Swap tutoring, creative workflows, and technical craft without monetary barriers. Connect one-on-one with fellow students to teach what you know and learn what you need.
+          </p>
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-md w-full sm:w-auto mb-space-xl">
+            <a class="inline-flex justify-center items-center gap-space-sm px-6 py-3.5 bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md rounded-lg shadow-sm transition-all duration-200 active:scale-[0.98]" href="register.html">
+              <span>Get Started Now</span>
+              <span class="material-symbols-outlined text-lg">north_east</span>
+            </a>
+            <a class="inline-flex justify-center items-center gap-space-sm px-6 py-3.5 bg-surface-container-lowest border border-outline text-on-surface font-label-md text-label-md rounded-lg hover:bg-surface-container-low transition-all duration-200 active:scale-[0.98]" href="login.html">
+              <span class="material-symbols-outlined text-lg">login</span>
+              <span>Log In</span>
+            </a>
+          </div>
+          <div class="pt-space-md border-t border-outline-variant w-full grid grid-cols-2 sm:grid-cols-3 gap-space-md">
+            <div>
+              <p class="font-headline-md text-headline-md font-bold text-on-surface">1-on-1</p>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">Peer tutoring sessions</p>
+            </div>
+            <div>
+              <p class="font-headline-md text-headline-md font-bold text-on-surface">Rated</p>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">Sessions rated after every swap</p>
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <p class="font-headline-md text-headline-md font-bold text-primary">Zero Fees</p>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">Pure student reciprocity</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 relative">
+          <div class="relative mx-auto max-w-md lg:max-w-none">
+            <div class="absolute inset-0 bg-surface-container-high rounded-xl transform rotate-2 translate-x-3 translate-y-3 border border-outline-variant"></div>
+            <div class="relative bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg shadow-sm">
+              <div class="flex items-center justify-between pb-space-md border-b border-surface-container-highest mb-space-md">
+                <div class="flex items-center gap-space-sm">
+                  <div class="w-11 h-11 rounded-full bg-tag-teach-bg border border-outline-variant flex items-center justify-center font-headline-sm text-headline-sm font-bold text-tag-teach-text">AK</div>
+                  <div>
+                    <h4 class="font-headline-sm text-headline-sm text-on-surface">Aisha Khan</h4>
+                    <p class="font-body-sm text-body-sm text-secondary">CS Sophomore</p>
+                  </div>
+                </div>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-status-active-bg text-status-active font-label-sm text-label-sm font-semibold">
+                  <span class="w-1.5 h-1.5 rounded-full bg-status-active"></span>
+                  Available Today
+                </span>
+              </div>
+              <div class="mb-space-md">
+                <div class="flex items-center gap-1 text-on-primary-fixed-variant font-label-sm text-label-sm uppercase tracking-wider mb-2 font-bold">
+                  <span class="material-symbols-outlined text-base">school</span>
+                  <span>Can Teach</span>
+                </div>
+                <div class="flex flex-wrap gap-space-xs">
+                  <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-tag-teach-bg text-tag-teach-text border border-tag-teach-border font-label-sm text-label-sm font-medium">
+                    <span class="material-symbols-outlined text-sm">north_east</span>Data Structures
+                  </span>
+                  <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-tag-teach-bg text-tag-teach-text border border-tag-teach-border font-label-sm text-label-sm font-medium">
+                    <span class="material-symbols-outlined text-sm">north_east</span>Python
+                  </span>
+                </div>
+              </div>
+              <div class="flex items-center justify-center my-3 relative">
+                <div class="w-full border-t border-dashed border-outline-variant"></div>
+                <div class="absolute bg-surface-container-lowest px-2 py-0.5 border border-outline-variant rounded-full text-secondary font-label-sm text-label-sm flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs">sync_alt</span>
+                  <span>Direct Swap</span>
+                </div>
+              </div>
+              <div class="mb-space-lg">
+                <div class="flex items-center gap-1 text-tag-learn-text font-label-sm text-label-sm uppercase tracking-wider mb-2 font-bold">
+                  <span class="material-symbols-outlined text-base">explore</span>
+                  <span>Wants To Learn</span>
+                </div>
+                <div class="flex flex-wrap gap-space-xs">
+                  <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-tag-learn-bg text-tag-learn-text border border-tag-learn-border font-label-sm text-label-sm font-medium">
+                    <span class="material-symbols-outlined text-sm">south_west</span>Guitar
+                  </span>
+                  <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-tag-learn-bg text-tag-learn-text border border-tag-learn-border font-label-sm text-label-sm font-medium">
+                    <span class="material-symbols-outlined text-sm">south_west</span>Spanish
+                  </span>
+                </div>
+              </div>
+              <div class="bg-surface-container-low rounded-lg p-space-md border-l-4 border-primary flex items-center justify-between">
+                <div class="flex items-center gap-space-sm">
+                  <span class="material-symbols-outlined text-primary text-xl">event_available</span>
+                  <div>
+                    <p class="font-label-md text-label-md text-on-surface">Suggested 45-min session</p>
+                    <p class="font-body-sm text-body-sm text-secondary">Sent through the marketplace</p>
+                  </div>
+                </div>
+                <a href="register.html" class="px-3 py-1.5 bg-primary text-on-primary rounded font-label-sm text-label-sm hover:bg-primary-container transition-colors">Join</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-space-2xl bg-surface-container-low border-y border-outline-variant" id="how-it-works">
+    <div class="max-w-7xl mx-auto px-space-lg md:px-margin">
+      <div class="text-center max-w-2xl mx-auto mb-space-2xl">
+        <div class="inline-flex items-center gap-1 text-primary font-label-sm text-label-sm uppercase tracking-wider font-bold mb-space-xs">
+          <span class="material-symbols-outlined text-base">handshake</span>
+          <span>Simple Skill Exchange</span>
+        </div>
+        <h2 class="font-headline-lg text-headline-lg text-on-surface mb-space-sm tracking-tight">How PeerXchange Works</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant">
+          A cooperative learning model built on reciprocity — no money changes hands, just an hour of your knowledge for an hour of someone else's.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg relative">
+        <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute -right-3 -top-3 text-surface-container-highest font-extrabold text-7xl select-none opacity-40">01</div>
+          <div>
+            <div class="w-12 h-12 rounded-lg bg-tag-teach-bg text-primary flex items-center justify-center mb-space-md border border-outline-variant">
+              <span class="material-symbols-outlined text-2xl">badge</span>
+            </div>
+            <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs">1. Create your profile</h3>
+            <p class="font-body-md text-body-md text-on-surface-variant">List what you can comfortably teach, and what subjects, languages, or tools you want to learn.</p>
+          </div>
+        </div>
+        <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute -right-3 -top-3 text-surface-container-highest font-extrabold text-7xl select-none opacity-40">02</div>
+          <div>
+            <div class="w-12 h-12 rounded-lg bg-surface-container-high text-on-surface flex items-center justify-center mb-space-md border border-outline-variant">
+              <span class="material-symbols-outlined text-2xl">search_check</span>
+            </div>
+            <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs">2. Find a peer</h3>
+            <p class="font-body-md text-body-md text-on-surface-variant">Browse peers by skill or search bio and find complementary skill matches.</p>
+          </div>
+        </div>
+        <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute -right-3 -top-3 text-surface-container-highest font-extrabold text-7xl select-none opacity-40">03</div>
+          <div>
+            <div class="w-12 h-12 rounded-lg bg-primary text-on-primary flex items-center justify-center mb-space-md shadow-xs">
+              <span class="material-symbols-outlined text-2xl">event_note</span>
+            </div>
+            <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs">3. Book a session</h3>
+            <p class="font-body-md text-body-md text-on-surface-variant">Propose a time, meet up, and rate the exchange once it's done.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-space-2xl bg-surface-container-lowest border-t border-outline-variant">
+    <div class="max-w-5xl mx-auto px-space-lg md:px-margin text-center">
+      <div class="bg-surface-container-low border border-outline-variant rounded-2xl p-space-xl md:p-12 relative overflow-hidden">
+        <div class="max-w-2xl mx-auto">
+          <span class="material-symbols-outlined text-4xl text-primary mb-space-sm">school</span>
+          <h2 class="font-headline-lg text-headline-lg text-on-surface mb-space-sm tracking-tight">Ready to unlock peer knowledge?</h2>
+          <p class="font-body-lg text-body-lg text-on-surface-variant mb-space-lg">
+            Join fellow students sharing skills, acing exams, and expanding their horizons together — free, always.
+          </p>
+          <a href="register.html" class="inline-flex justify-center items-center gap-space-sm px-6 py-3 bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md rounded-lg transition-all shadow-sm">
+            Get Started
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="bg-surface-container border-t border-outline-variant transition-colors">
+  <div class="flex flex-col md:flex-row justify-between items-center w-full px-space-lg md:px-margin py-space-lg max-w-7xl mx-auto gap-space-md">
+    <div class="flex flex-col md:flex-row items-center md:items-start gap-space-sm text-center md:text-left">
+      <span class="font-headline-sm text-headline-sm font-bold text-primary">PeerXchange</span>
+      <span class="hidden md:inline text-outline-variant">|</span>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">© 2026 PeerXchange. Student Skill Exchange / Peer Tutoring Marketplace.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>

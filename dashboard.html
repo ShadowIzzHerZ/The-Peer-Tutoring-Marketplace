@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard — PeerXchange</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="js/tailwind-config.js"></script>
+<link rel="stylesheet" href="css/extra.css"/>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen flex flex-col">
+
+<header class="sticky top-0 z-50 bg-surface-container-lowest border-b border-outline-variant">
+  <div class="flex justify-between items-center w-full px-space-lg md:px-margin max-w-7xl mx-auto h-16">
+    <a class="flex items-center gap-space-sm group" href="index.html">
+      <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary shadow-sm group-hover:bg-primary-container transition-colors duration-150">
+        <span class="material-symbols-outlined text-2xl">swap_horizontal_circle</span>
+      </div>
+      <span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">PeerXchange</span>
+    </a>
+    <button id="menu-toggle" class="md:hidden text-on-surface" aria-label="Toggle menu">
+      <span class="material-symbols-outlined text-3xl">menu</span>
+    </button>
+    <ul id="nav-links" class="hidden md:flex items-center gap-space-lg">
+      <li class="nav-guest-only"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="login.html">Login</a></li>
+      <li class="nav-guest-only"><a class="px-space-md py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md" href="register.html">Sign Up</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-primary font-bold" href="dashboard.html">Dashboard</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="browse.html">Browse</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="requests.html">Requests</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="profile.html">Profile</a></li>
+      <li class="nav-admin-only hidden"><a class="font-label-md text-label-md text-primary font-bold" href="admin.html">Admin</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary flex items-center gap-1" href="#" id="logout-btn"><span class="material-symbols-outlined text-[18px]">logout</span>Logout (<span id="nav-user-name"></span>)</a></li>
+    </ul>
+  </div>
+</header>
+
+<main class="flex-grow max-w-7xl mx-auto w-full px-space-lg md:px-margin py-space-xl">
+  <div class="mb-space-lg">
+    <h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Welcome, <span id="welcome-name">...</span></h1>
+    <p class="font-body-md text-body-md text-on-surface-variant">Here's your PeerXchange activity at a glance.</p>
+  </div>
+
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-space-md mb-space-xl">
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg text-center">
+      <p class="font-headline-lg text-headline-lg font-bold text-primary" id="stat-pending">0</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">Pending Requests</p>
+    </div>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg text-center">
+      <p class="font-headline-lg text-headline-lg font-bold text-primary" id="stat-sent">0</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">Requests Sent</p>
+    </div>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg text-center">
+      <p class="font-headline-lg text-headline-lg font-bold text-primary" id="stat-completed">0</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">Sessions Completed</p>
+    </div>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg text-center">
+      <p class="font-headline-lg text-headline-lg font-bold text-primary" id="stat-rating">—</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">Average Rating</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-space-lg mb-space-lg">
+    <div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
+      <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-sm">About you</h3>
+      <p class="font-body-md text-body-md text-on-surface-variant" id="bio-text">...</p>
+    </div>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
+      <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-sm">Quick links</h3>
+      <div class="space-y-2">
+        <a href="browse.html" class="flex items-center gap-2 font-label-md text-label-md text-primary hover:text-primary-container"><span class="material-symbols-outlined text-[18px]">search</span>Browse peers to learn from</a>
+        <a href="requests.html" class="flex items-center gap-2 font-label-md text-label-md text-primary hover:text-primary-container"><span class="material-symbols-outlined text-[18px]">inbox</span>View your requests</a>
+        <a href="profile.html" class="flex items-center gap-2 font-label-md text-label-md text-primary hover:text-primary-container"><span class="material-symbols-outlined text-[18px]">edit</span>Edit your profile</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
+    <div class="mb-space-md">
+      <p class="font-label-sm text-label-sm text-on-primary-fixed-variant font-bold uppercase tracking-wider mb-2 flex items-center gap-1">
+        <span class="material-symbols-outlined text-[16px]">north_east</span>You can teach
+      </p>
+      <div class="flex flex-wrap gap-2" id="teach-tags"></div>
+    </div>
+    <div>
+      <p class="font-label-sm text-label-sm text-tag-learn-text font-bold uppercase tracking-wider mb-2 flex items-center gap-1">
+        <span class="material-symbols-outlined text-[16px]">south_west</span>You want to learn
+      </p>
+      <div class="flex flex-wrap gap-2" id="learn-tags"></div>
+    </div>
+  </div>
+</main>
+
+<footer class="bg-surface-container border-t border-outline-variant">
+  <div class="max-w-7xl mx-auto px-space-lg md:px-margin py-space-lg text-center">
+    <span class="font-body-sm text-body-sm text-on-surface-variant">© 2026 PeerXchange. Student Skill Exchange / Peer Tutoring Marketplace.</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
