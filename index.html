@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>PeerXchange | Student Skill Exchange Network</title>
+<script src="js/theme-init.js"></script>
+<title>Zen | Student Skill Exchange Network</title>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -11,6 +12,7 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="js/tailwind-config.js"></script>
 <link rel="stylesheet" href="css/extra.css"/>
+<link rel="stylesheet" href="css/theme.css"/>
 </head>
 <body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed min-h-screen flex flex-col antialiased">
 
@@ -19,10 +21,21 @@
     <div class="flex items-center gap-space-sm">
       <a class="flex items-center gap-space-sm group" href="index.html">
         <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary shadow-sm group-hover:bg-primary-container transition-colors duration-150">
-          <span class="material-symbols-outlined text-2xl">swap_horizontal_circle</span>
+          <span class="material-symbols-outlined text-2xl">spa</span>
         </div>
-        <span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">PeerXchange</span>
+        <span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">Zen</span>
       </a>
+    </div>
+
+    <div class="flex items-center gap-1">
+      <select id="lang-switcher" class="bg-transparent border border-outline-variant rounded-lg text-label-sm font-label-sm text-on-surface px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+        <option value="es">Español</option>
+      </select>
+      <button id="theme-toggle" class="text-on-surface hover:bg-surface-container-low rounded-lg p-2 transition-colors" aria-label="Toggle dark mode" type="button">
+        <span class="material-symbols-outlined theme-icon text-2xl">dark_mode</span>
+      </button>
     </div>
 
     <button id="menu-toggle" class="md:hidden text-on-surface" aria-label="Toggle menu">
@@ -30,17 +43,17 @@
     </button>
 
     <nav class="hidden md:flex items-center space-x-space-lg">
-      <a class="font-label-md text-label-md text-secondary hover:text-on-surface transition-colors duration-150 py-1" href="#how-it-works">How it works</a>
+      <a class="font-label-md text-label-md text-secondary hover:text-on-surface transition-colors duration-150 py-1" href="#how-it-works" data-i18n="nav.howItWorks">How it works</a>
     </nav>
 
     <ul id="nav-links" class="hidden md:flex items-center gap-space-sm">
-      <li class="nav-guest-only"><a class="hidden sm:inline-flex items-center px-space-md py-2 border border-outline rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-all duration-200 active:scale-[0.98]" href="login.html">Log In</a></li>
-      <li class="nav-guest-only"><a class="inline-flex items-center gap-space-xs px-space-md py-2 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-md text-label-md transition-all duration-200 active:scale-[0.98] shadow-sm" href="register.html"><span>Get Started</span><span class="material-symbols-outlined text-base">arrow_forward</span></a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="dashboard.html">Dashboard</a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="browse.html">Browse</a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="requests.html">Requests</a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="profile.html">Profile</a></li>
-      <li class="nav-admin-only hidden"><a class="font-label-md text-label-md text-primary font-bold" href="admin.html">Admin</a></li>
+      <li class="nav-guest-only"><a class="hidden sm:inline-flex items-center px-space-md py-2 border border-outline rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-all duration-200 active:scale-[0.98]" href="login.html" data-i18n="nav.login">Log In</a></li>
+      <li class="nav-guest-only"><a class="inline-flex items-center gap-space-xs px-space-md py-2 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-md text-label-md transition-all duration-200 active:scale-[0.98] shadow-sm" href="register.html"><span data-i18n="nav.signup">Get Started</span><span class="material-symbols-outlined text-base">arrow_forward</span></a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="browse.html" data-i18n="nav.browse">Browse</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="requests.html" data-i18n="nav.requests">Requests</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="profile.html" data-i18n="nav.profile">Profile</a></li>
+      <li class="nav-admin-only hidden"><a class="font-label-md text-label-md text-primary font-bold" href="admin.html" data-i18n="nav.admin">Admin</a></li>
       <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="#" id="logout-btn">Logout (<span id="nav-user-name"></span>)</a></li>
     </ul>
   </div>
@@ -54,43 +67,43 @@
         <div class="lg:col-span-7 flex flex-col items-start text-left">
           <div class="inline-flex items-center gap-space-sm px-space-sm py-1 rounded-full bg-surface-container-high border border-outline-variant mb-space-md">
             <span class="w-2 h-2 rounded-full bg-status-active pulse-dot"></span>
-            <span class="font-label-sm text-label-sm text-on-surface-variant font-semibold">Peer Learning Commons • Free for all students</span>
+            <span class="font-label-sm text-label-sm text-on-surface-variant font-semibold" data-i18n="landing.badge">Peer Learning Commons • Free for all students</span>
           </div>
           <h1 class="hidden md:block font-headline-hero text-headline-hero text-on-surface mb-space-md tracking-tight">
-            Exchange skills. <br/>
-            <span class="text-primary">Master new subjects.</span> <br/>
-            Free with peers.
+            <span data-i18n="landing.title1">Exchange skills.</span> <br/>
+            <span class="text-primary" data-i18n="landing.title2">Master new subjects.</span> <br/>
+            <span data-i18n="landing.title3">Free with peers.</span>
           </h1>
           <h1 class="block md:hidden font-headline-hero-mobile text-headline-hero-mobile text-on-surface mb-space-md tracking-tight">
-            Exchange skills. <br/>
-            <span class="text-primary">Master new subjects.</span> <br/>
-            Free with peers.
+            <span data-i18n="landing.title1">Exchange skills.</span> <br/>
+            <span class="text-primary" data-i18n="landing.title2">Master new subjects.</span> <br/>
+            <span data-i18n="landing.title3">Free with peers.</span>
           </h1>
-          <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mb-space-xl">
+          <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mb-space-xl" data-i18n="landing.subtitle">
             Swap tutoring, creative workflows, and technical craft without monetary barriers. Connect one-on-one with fellow students to teach what you know and learn what you need.
           </p>
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-md w-full sm:w-auto mb-space-xl">
             <a class="inline-flex justify-center items-center gap-space-sm px-6 py-3.5 bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md rounded-lg shadow-sm transition-all duration-200 active:scale-[0.98]" href="register.html">
-              <span>Get Started Now</span>
+              <span data-i18n="landing.cta1">Get Started Now</span>
               <span class="material-symbols-outlined text-lg">north_east</span>
             </a>
             <a class="inline-flex justify-center items-center gap-space-sm px-6 py-3.5 bg-surface-container-lowest border border-outline text-on-surface font-label-md text-label-md rounded-lg hover:bg-surface-container-low transition-all duration-200 active:scale-[0.98]" href="login.html">
               <span class="material-symbols-outlined text-lg">login</span>
-              <span>Log In</span>
+              <span data-i18n="landing.cta2">Log In</span>
             </a>
           </div>
           <div class="pt-space-md border-t border-outline-variant w-full grid grid-cols-2 sm:grid-cols-3 gap-space-md">
             <div>
-              <p class="font-headline-md text-headline-md font-bold text-on-surface">1-on-1</p>
-              <p class="font-body-sm text-body-sm text-on-surface-variant">Peer tutoring sessions</p>
+              <p class="font-headline-md text-headline-md font-bold text-on-surface" data-i18n="landing.stat1">1-on-1</p>
+              <p class="font-body-sm text-body-sm text-on-surface-variant" data-i18n="landing.stat1Label">Peer tutoring sessions</p>
             </div>
             <div>
-              <p class="font-headline-md text-headline-md font-bold text-on-surface">Rated</p>
-              <p class="font-body-sm text-body-sm text-on-surface-variant">Sessions rated after every swap</p>
+              <p class="font-headline-md text-headline-md font-bold text-on-surface" data-i18n="landing.stat2">Rated</p>
+              <p class="font-body-sm text-body-sm text-on-surface-variant" data-i18n="landing.stat2Label">Sessions rated after every swap</p>
             </div>
             <div class="col-span-2 sm:col-span-1">
-              <p class="font-headline-md text-headline-md font-bold text-primary">Zero Fees</p>
-              <p class="font-body-sm text-body-sm text-on-surface-variant">Pure student reciprocity</p>
+              <p class="font-headline-md text-headline-md font-bold text-primary" data-i18n="landing.stat3">Zero Fees</p>
+              <p class="font-body-sm text-body-sm text-on-surface-variant" data-i18n="landing.stat3Label">Pure student reciprocity</p>
             </div>
           </div>
         </div>
@@ -109,13 +122,13 @@
                 </div>
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-status-active-bg text-status-active font-label-sm text-label-sm font-semibold">
                   <span class="w-1.5 h-1.5 rounded-full bg-status-active"></span>
-                  Available Today
+                  <span data-i18n="landing.availableToday">Available Today</span>
                 </span>
               </div>
               <div class="mb-space-md">
                 <div class="flex items-center gap-1 text-on-primary-fixed-variant font-label-sm text-label-sm uppercase tracking-wider mb-2 font-bold">
                   <span class="material-symbols-outlined text-base">school</span>
-                  <span>Can Teach</span>
+                  <span data-i18n="landing.canTeach">Can Teach</span>
                 </div>
                 <div class="flex flex-wrap gap-space-xs">
                   <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-tag-teach-bg text-tag-teach-text border border-tag-teach-border font-label-sm text-label-sm font-medium">
@@ -130,13 +143,13 @@
                 <div class="w-full border-t border-dashed border-outline-variant"></div>
                 <div class="absolute bg-surface-container-lowest px-2 py-0.5 border border-outline-variant rounded-full text-secondary font-label-sm text-label-sm flex items-center gap-1">
                   <span class="material-symbols-outlined text-xs">sync_alt</span>
-                  <span>Direct Swap</span>
+                  <span data-i18n="landing.directSwap">Direct Swap</span>
                 </div>
               </div>
               <div class="mb-space-lg">
                 <div class="flex items-center gap-1 text-tag-learn-text font-label-sm text-label-sm uppercase tracking-wider mb-2 font-bold">
                   <span class="material-symbols-outlined text-base">explore</span>
-                  <span>Wants To Learn</span>
+                  <span data-i18n="landing.wantsToLearn">Wants To Learn</span>
                 </div>
                 <div class="flex flex-wrap gap-space-xs">
                   <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-tag-learn-bg text-tag-learn-text border border-tag-learn-border font-label-sm text-label-sm font-medium">
@@ -151,11 +164,11 @@
                 <div class="flex items-center gap-space-sm">
                   <span class="material-symbols-outlined text-primary text-xl">event_available</span>
                   <div>
-                    <p class="font-label-md text-label-md text-on-surface">Suggested 45-min session</p>
-                    <p class="font-body-sm text-body-sm text-secondary">Sent through the marketplace</p>
+                    <p class="font-label-md text-label-md text-on-surface" data-i18n="landing.suggestedSession">Suggested 45-min session</p>
+                    <p class="font-body-sm text-body-sm text-secondary" data-i18n="landing.sentThroughMarketplace">Sent through the marketplace</p>
                   </div>
                 </div>
-                <a href="register.html" class="px-3 py-1.5 bg-primary text-on-primary rounded font-label-sm text-label-sm hover:bg-primary-container transition-colors">Join</a>
+                <a href="register.html" class="px-3 py-1.5 bg-primary text-on-primary rounded font-label-sm text-label-sm hover:bg-primary-container transition-colors" data-i18n="landing.join">Join</a>
               </div>
             </div>
           </div>
@@ -169,10 +182,10 @@
       <div class="text-center max-w-2xl mx-auto mb-space-2xl">
         <div class="inline-flex items-center gap-1 text-primary font-label-sm text-label-sm uppercase tracking-wider font-bold mb-space-xs">
           <span class="material-symbols-outlined text-base">handshake</span>
-          <span>Simple Skill Exchange</span>
+          <span data-i18n="landing.howBadge">Simple Skill Exchange</span>
         </div>
-        <h2 class="font-headline-lg text-headline-lg text-on-surface mb-space-sm tracking-tight">How PeerXchange Works</h2>
-        <p class="font-body-md text-body-md text-on-surface-variant">
+        <h2 class="font-headline-lg text-headline-lg text-on-surface mb-space-sm tracking-tight" data-i18n="landing.howTitle">How Zen Works</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant" data-i18n="landing.howSubtitle">
           A cooperative learning model built on reciprocity — no money changes hands, just an hour of your knowledge for an hour of someone else's.
         </p>
       </div>
@@ -183,8 +196,8 @@
             <div class="w-12 h-12 rounded-lg bg-tag-teach-bg text-primary flex items-center justify-center mb-space-md border border-outline-variant">
               <span class="material-symbols-outlined text-2xl">badge</span>
             </div>
-            <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs">1. Create your profile</h3>
-            <p class="font-body-md text-body-md text-on-surface-variant">List what you can comfortably teach, and what subjects, languages, or tools you want to learn.</p>
+            <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs" data-i18n="landing.step1Title">1. Create your profile</h3>
+            <p class="font-body-md text-body-md text-on-surface-variant" data-i18n="landing.step1Body">List what you can comfortably teach, and what subjects, languages, or tools you want to learn.</p>
           </div>
         </div>
         <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg flex flex-col justify-between relative overflow-hidden">
@@ -193,8 +206,8 @@
             <div class="w-12 h-12 rounded-lg bg-surface-container-high text-on-surface flex items-center justify-center mb-space-md border border-outline-variant">
               <span class="material-symbols-outlined text-2xl">search_check</span>
             </div>
-            <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs">2. Find a peer</h3>
-            <p class="font-body-md text-body-md text-on-surface-variant">Browse peers by skill or search bio and find complementary skill matches.</p>
+            <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs" data-i18n="landing.step2Title">2. Find a peer</h3>
+            <p class="font-body-md text-body-md text-on-surface-variant" data-i18n="landing.step2Body">Browse peers by skill or search bio and find complementary skill matches.</p>
           </div>
         </div>
         <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg flex flex-col justify-between relative overflow-hidden">
@@ -203,8 +216,8 @@
             <div class="w-12 h-12 rounded-lg bg-primary text-on-primary flex items-center justify-center mb-space-md shadow-xs">
               <span class="material-symbols-outlined text-2xl">event_note</span>
             </div>
-            <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs">3. Book a session</h3>
-            <p class="font-body-md text-body-md text-on-surface-variant">Propose a time, meet up, and rate the exchange once it's done.</p>
+            <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs" data-i18n="landing.step3Title">3. Book a session</h3>
+            <p class="font-body-md text-body-md text-on-surface-variant" data-i18n="landing.step3Body">Propose a time, meet up, and rate the exchange once it's done.</p>
           </div>
         </div>
       </div>
@@ -216,11 +229,11 @@
       <div class="bg-surface-container-low border border-outline-variant rounded-2xl p-space-xl md:p-12 relative overflow-hidden">
         <div class="max-w-2xl mx-auto">
           <span class="material-symbols-outlined text-4xl text-primary mb-space-sm">school</span>
-          <h2 class="font-headline-lg text-headline-lg text-on-surface mb-space-sm tracking-tight">Ready to unlock peer knowledge?</h2>
-          <p class="font-body-lg text-body-lg text-on-surface-variant mb-space-lg">
+          <h2 class="font-headline-lg text-headline-lg text-on-surface mb-space-sm tracking-tight" data-i18n="landing.ctaTitle">Ready to unlock peer knowledge?</h2>
+          <p class="font-body-lg text-body-lg text-on-surface-variant mb-space-lg" data-i18n="landing.ctaBody">
             Join fellow students sharing skills, acing exams, and expanding their horizons together — free, always.
           </p>
-          <a href="register.html" class="inline-flex justify-center items-center gap-space-sm px-6 py-3 bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md rounded-lg transition-all shadow-sm">
+          <a href="register.html" class="inline-flex justify-center items-center gap-space-sm px-6 py-3 bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md rounded-lg transition-all shadow-sm" data-i18n="landing.ctaButton">
             Get Started
           </a>
         </div>
@@ -232,9 +245,9 @@
 <footer class="bg-surface-container border-t border-outline-variant transition-colors">
   <div class="flex flex-col md:flex-row justify-between items-center w-full px-space-lg md:px-margin py-space-lg max-w-7xl mx-auto gap-space-md">
     <div class="flex flex-col md:flex-row items-center md:items-start gap-space-sm text-center md:text-left">
-      <span class="font-headline-sm text-headline-sm font-bold text-primary">PeerXchange</span>
+      <span class="font-headline-sm text-headline-sm font-bold text-primary">Zen</span>
       <span class="hidden md:inline text-outline-variant">|</span>
-      <p class="font-body-sm text-body-sm text-on-surface-variant">© 2026 PeerXchange. Student Skill Exchange / Peer Tutoring Marketplace.</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">© 2026 <span data-i18n="footer.text">Zen. Student Skill Exchange / Peer Tutoring Marketplace.</span></p>
     </div>
   </div>
 </footer>
@@ -242,6 +255,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
 <script src="js/app.js"></script>
+<script src="js/i18n.js"></script>
 <script src="js/nav.js"></script>
 </body>
 </html>

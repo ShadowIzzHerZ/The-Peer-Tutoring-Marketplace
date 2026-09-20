@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Dashboard — PeerXchange</title>
+<script src="js/theme-init.js"></script>
+<title>Dashboard — Zen</title>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -11,6 +12,7 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="js/tailwind-config.js"></script>
 <link rel="stylesheet" href="css/extra.css"/>
+<link rel="stylesheet" href="css/theme.css"/>
 </head>
 <body class="bg-background text-on-surface font-body-md antialiased min-h-screen flex flex-col">
 
@@ -18,21 +20,29 @@
   <div class="flex justify-between items-center w-full px-space-lg md:px-margin max-w-7xl mx-auto h-16">
     <a class="flex items-center gap-space-sm group" href="index.html">
       <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary shadow-sm group-hover:bg-primary-container transition-colors duration-150">
-        <span class="material-symbols-outlined text-2xl">swap_horizontal_circle</span>
+        <span class="material-symbols-outlined text-2xl">spa</span>
       </div>
-      <span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">PeerXchange</span>
+      <span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">Zen</span>
     </a>
+    <select id="lang-switcher" class="bg-transparent border border-outline-variant rounded-lg text-label-sm font-label-sm text-on-surface px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary">
+      <option value="en">English</option>
+      <option value="hi">हिन्दी</option>
+      <option value="es">Español</option>
+    </select>
+    <button id="theme-toggle" class="text-on-surface hover:bg-surface-container-low rounded-lg p-2 transition-colors" aria-label="Toggle dark mode" type="button">
+      <span class="material-symbols-outlined theme-icon text-2xl">dark_mode</span>
+    </button>
     <button id="menu-toggle" class="md:hidden text-on-surface" aria-label="Toggle menu">
       <span class="material-symbols-outlined text-3xl">menu</span>
     </button>
     <ul id="nav-links" class="hidden md:flex items-center gap-space-lg">
-      <li class="nav-guest-only"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="login.html">Login</a></li>
-      <li class="nav-guest-only"><a class="px-space-md py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md" href="register.html">Sign Up</a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-primary font-bold" href="dashboard.html">Dashboard</a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="browse.html">Browse</a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="requests.html">Requests</a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="profile.html">Profile</a></li>
-      <li class="nav-admin-only hidden"><a class="font-label-md text-label-md text-primary font-bold" href="admin.html">Admin</a></li>
+      <li class="nav-guest-only"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="login.html" data-i18n="nav.login">Login</a></li>
+      <li class="nav-guest-only"><a class="px-space-md py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md" href="register.html" data-i18n="nav.signup">Sign Up</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-primary font-bold" href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="browse.html" data-i18n="nav.browse">Browse</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="requests.html" data-i18n="nav.requests">Requests</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="profile.html" data-i18n="nav.profile">Profile</a></li>
+      <li class="nav-admin-only hidden"><a class="font-label-md text-label-md text-primary font-bold" href="admin.html" data-i18n="nav.admin">Admin</a></li>
       <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary flex items-center gap-1" href="#" id="logout-btn"><span class="material-symbols-outlined text-[18px]">logout</span>Logout (<span id="nav-user-name"></span>)</a></li>
     </ul>
   </div>
@@ -41,47 +51,47 @@
 <main class="flex-grow max-w-7xl mx-auto w-full px-space-lg md:px-margin py-space-xl">
   <section class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pb-space-lg border-b border-outline-variant mb-space-lg">
     <div>
-      <h1 class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight">Welcome, <span id="welcome-name">...</span></h1>
-      <p class="font-body-md text-body-md text-on-surface-variant mt-1">Here's your PeerXchange activity at a glance.</p>
+      <h1 class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight"><span data-i18n="dashboard.welcome">Welcome,</span> <span id="welcome-name">...</span></h1>
+      <p class="font-body-md text-body-md text-on-surface-variant mt-1" data-i18n="dashboard.subtitle">Here's your Zen activity at a glance.</p>
     </div>
     <a href="browse.html" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-sm hover:bg-primary-container active:scale-[0.98] transition-all">
       <span class="material-symbols-outlined text-lg">add_circle</span>
-      <span>Request New Session</span>
+      <span data-i18n="dashboard.requestNewSession">Request New Session</span>
     </a>
   </section>
 
   <section class="grid grid-cols-2 lg:grid-cols-4 gap-space-md mb-space-xl">
     <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
       <div class="flex items-start justify-between mb-space-sm">
-        <span class="font-label-md text-label-md text-secondary">Pending</span>
+        <span class="font-label-md text-label-md text-secondary" data-i18n="dashboard.pending">Pending</span>
         <span class="p-1.5 bg-surface-container-low text-primary rounded-lg"><span class="material-symbols-outlined text-lg">inbox</span></span>
       </div>
       <p class="font-headline-lg text-headline-lg font-bold text-on-surface" id="stat-pending">0</p>
-      <p class="font-body-sm text-body-sm text-on-surface-variant">Requests awaiting your reply</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant" data-i18n="dashboard.pendingSub">Requests awaiting your reply</p>
     </div>
     <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
       <div class="flex items-start justify-between mb-space-sm">
-        <span class="font-label-md text-label-md text-secondary">Sent</span>
+        <span class="font-label-md text-label-md text-secondary" data-i18n="dashboard.sent">Sent</span>
         <span class="p-1.5 bg-surface-container-low text-secondary rounded-lg"><span class="material-symbols-outlined text-lg">send</span></span>
       </div>
       <p class="font-headline-lg text-headline-lg font-bold text-on-surface" id="stat-sent">0</p>
-      <p class="font-body-sm text-body-sm text-on-surface-variant">Requests you've made</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant" data-i18n="dashboard.sentSub">Requests you've made</p>
     </div>
     <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
       <div class="flex items-start justify-between mb-space-sm">
-        <span class="font-label-md text-label-md text-secondary">Completed</span>
+        <span class="font-label-md text-label-md text-secondary" data-i18n="dashboard.completed">Completed</span>
         <span class="p-1.5 bg-surface-container-low text-status-completed rounded-lg"><span class="material-symbols-outlined text-lg">verified</span></span>
       </div>
       <p class="font-headline-lg text-headline-lg font-bold text-on-surface" id="stat-completed">0</p>
-      <p class="font-body-sm text-body-sm text-on-surface-variant">Sessions you've hosted</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant" data-i18n="dashboard.completedSub">Sessions you've hosted</p>
     </div>
     <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
       <div class="flex items-start justify-between mb-space-sm">
-        <span class="font-label-md text-label-md text-secondary">Rating</span>
+        <span class="font-label-md text-label-md text-secondary" data-i18n="dashboard.rating">Rating</span>
         <span class="p-1.5 bg-surface-container-low text-status-pending rounded-lg"><span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">grade</span></span>
       </div>
       <p class="font-headline-lg text-headline-lg font-bold text-on-surface" id="stat-rating">—</p>
-      <p class="font-body-sm text-body-sm text-on-surface-variant">Average from completed sessions</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant" data-i18n="dashboard.ratingSub">Average from completed sessions</p>
     </div>
   </section>
 
@@ -93,24 +103,24 @@
           <div>
             <h2 class="font-headline-sm text-headline-sm font-bold text-on-surface" id="profile-name">...</h2>
             <a href="profile.html" class="inline-flex items-center gap-1 font-label-sm text-label-sm text-primary hover:text-primary-container transition-colors">
-              <span class="material-symbols-outlined text-sm">edit</span>Edit Profile
+              <span class="material-symbols-outlined text-sm">edit</span><span data-i18n="dashboard.editProfile">Edit Profile</span>
             </a>
           </div>
         </div>
         <div class="mt-space-md">
-          <h3 class="font-label-md text-label-md text-secondary uppercase tracking-wider text-[11px]">Bio</h3>
+          <h3 class="font-label-md text-label-md text-secondary uppercase tracking-wider text-[11px]" data-i18n="dashboard.bio">Bio</h3>
           <p class="font-body-md text-body-md text-on-surface mt-1.5 leading-relaxed bg-surface-container-low p-space-md rounded-lg border border-outline-variant" id="bio-text">...</p>
         </div>
         <div class="mt-space-lg space-y-space-md">
           <div>
             <p class="font-label-md text-label-md text-tag-teach-text flex items-center gap-1.5 mb-2">
-              <span class="material-symbols-outlined text-base">north_east</span>Skills you can teach
+              <span class="material-symbols-outlined text-base">north_east</span><span data-i18n="dashboard.canTeach">Skills you can teach</span>
             </p>
             <div class="flex flex-wrap gap-2" id="teach-tags"></div>
           </div>
           <div class="pt-space-sm border-t border-outline-variant">
             <p class="font-label-md text-label-md text-tag-learn-text flex items-center gap-1.5 mb-2">
-              <span class="material-symbols-outlined text-base">south_west</span>Skills you want to learn
+              <span class="material-symbols-outlined text-base">south_west</span><span data-i18n="dashboard.wantToLearn">Skills you want to learn</span>
             </p>
             <div class="flex flex-wrap gap-2" id="learn-tags"></div>
           </div>
@@ -123,11 +133,11 @@
             <div class="p-2 w-fit rounded-lg bg-surface-container-low text-primary mb-3 group-hover:bg-primary-fixed transition-colors">
               <span class="material-symbols-outlined text-2xl">travel_explore</span>
             </div>
-            <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface group-hover:text-primary transition-colors">Browse Peers</h3>
-            <p class="font-body-sm text-body-sm text-secondary mt-1">Find someone who teaches what you want to learn.</p>
+            <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface group-hover:text-primary transition-colors" data-i18n="dashboard.browsePeers">Browse Peers</h3>
+            <p class="font-body-sm text-body-sm text-secondary mt-1" data-i18n="dashboard.browsePeersBody">Find someone who teaches what you want to learn.</p>
           </div>
           <div class="mt-space-md flex items-center font-label-md text-label-md text-primary gap-1">
-            <span>Find matches</span><span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            <span data-i18n="dashboard.findMatches">Find matches</span><span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
           </div>
         </a>
         <a href="requests.html" class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg flex flex-col justify-between group">
@@ -135,11 +145,11 @@
             <div class="p-2 w-fit rounded-lg bg-status-pending-bg text-status-pending mb-3 group-hover:bg-primary-fixed transition-colors">
               <span class="material-symbols-outlined text-2xl">mark_email_unread</span>
             </div>
-            <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface group-hover:text-primary transition-colors">Manage Requests</h3>
-            <p class="font-body-sm text-body-sm text-secondary mt-1">Review, accept, or track your session requests.</p>
+            <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface group-hover:text-primary transition-colors" data-i18n="dashboard.manageRequests">Manage Requests</h3>
+            <p class="font-body-sm text-body-sm text-secondary mt-1" data-i18n="dashboard.manageRequestsBody">Review, accept, or track your session requests.</p>
           </div>
           <div class="mt-space-md flex items-center font-label-md text-label-md text-primary gap-1">
-            <span>View queue</span><span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            <span data-i18n="dashboard.viewQueue">View queue</span><span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
           </div>
         </a>
         <a href="profile.html" class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg flex flex-col justify-between group">
@@ -147,11 +157,11 @@
             <div class="p-2 w-fit rounded-lg bg-surface-container-low text-secondary mb-3 group-hover:bg-primary-fixed transition-colors">
               <span class="material-symbols-outlined text-2xl">badge</span>
             </div>
-            <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface group-hover:text-primary transition-colors">Public Profile</h3>
-            <p class="font-body-sm text-body-sm text-secondary mt-1">Update your bio and the skills you list.</p>
+            <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface group-hover:text-primary transition-colors" data-i18n="dashboard.publicProfile">Public Profile</h3>
+            <p class="font-body-sm text-body-sm text-secondary mt-1" data-i18n="dashboard.publicProfileBody">Update your bio and the skills you list.</p>
           </div>
           <div class="mt-space-md flex items-center font-label-md text-label-md text-primary gap-1">
-            <span>Customize</span><span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            <span data-i18n="dashboard.customize">Customize</span><span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
           </div>
         </a>
       </div>
@@ -161,11 +171,11 @@
       <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg">
         <div class="flex items-center gap-2 pb-space-sm border-b border-outline-variant mb-space-md">
           <span class="material-symbols-outlined text-primary text-xl">inbox</span>
-          <h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">Latest Received Requests</h2>
+          <h2 class="font-headline-sm text-headline-sm font-bold text-on-surface" data-i18n="dashboard.latestReceived">Latest Received Requests</h2>
         </div>
         <div id="recent-received-list" class="space-y-space-md"></div>
-        <p id="recent-received-empty" class="hidden text-center text-on-surface-variant font-body-sm py-space-lg">No one has requested a session with you yet.</p>
-        <a href="requests.html" class="mt-space-md inline-flex items-center gap-1 font-label-sm text-label-sm text-primary hover:underline">View all requests <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+        <p id="recent-received-empty" class="hidden text-center text-on-surface-variant font-body-sm py-space-lg" data-i18n="dashboard.noReceivedYet">No one has requested a session with you yet.</p>
+        <a href="requests.html" class="mt-space-md inline-flex items-center gap-1 font-label-sm text-label-sm text-primary hover:underline"><span data-i18n="dashboard.viewAllRequests">View all requests</span> <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
       </div>
     </div>
   </div>
@@ -173,13 +183,14 @@
 
 <footer class="bg-surface-container border-t border-outline-variant">
   <div class="max-w-7xl mx-auto px-space-lg md:px-margin py-space-lg text-center">
-    <span class="font-body-sm text-body-sm text-on-surface-variant">© 2026 PeerXchange. Student Skill Exchange / Peer Tutoring Marketplace.</span>
+    <span class="font-body-sm text-body-sm text-on-surface-variant">© 2026 <span data-i18n="footer.text">Zen. Student Skill Exchange / Peer Tutoring Marketplace.</span></span>
   </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
 <script src="js/app.js"></script>
+<script src="js/i18n.js"></script>
 <script src="js/nav.js"></script>
 <script src="js/dashboard.js"></script>
 </body>

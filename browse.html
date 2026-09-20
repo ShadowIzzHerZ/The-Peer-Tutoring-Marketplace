@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Browse Peers — PeerXchange</title>
+<script src="js/theme-init.js"></script>
+<title>Browse Peers — Zen</title>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -11,6 +12,7 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="js/tailwind-config.js"></script>
 <link rel="stylesheet" href="css/extra.css"/>
+<link rel="stylesheet" href="css/theme.css"/>
 </head>
 <body class="bg-background text-on-surface font-body-md antialiased min-h-screen flex flex-col">
 
@@ -18,21 +20,29 @@
   <div class="flex justify-between items-center w-full px-space-lg md:px-margin max-w-7xl mx-auto h-16">
     <a class="flex items-center gap-space-sm group" href="index.html">
       <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary shadow-sm group-hover:bg-primary-container transition-colors duration-150">
-        <span class="material-symbols-outlined text-2xl">swap_horizontal_circle</span>
+        <span class="material-symbols-outlined text-2xl">spa</span>
       </div>
-      <span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">PeerXchange</span>
+      <span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">Zen</span>
     </a>
+    <select id="lang-switcher" class="bg-transparent border border-outline-variant rounded-lg text-label-sm font-label-sm text-on-surface px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary">
+      <option value="en">English</option>
+      <option value="hi">हिन्दी</option>
+      <option value="es">Español</option>
+    </select>
+    <button id="theme-toggle" class="text-on-surface hover:bg-surface-container-low rounded-lg p-2 transition-colors" aria-label="Toggle dark mode" type="button">
+      <span class="material-symbols-outlined theme-icon text-2xl">dark_mode</span>
+    </button>
     <button id="menu-toggle" class="md:hidden text-on-surface" aria-label="Toggle menu">
       <span class="material-symbols-outlined text-3xl">menu</span>
     </button>
     <ul id="nav-links" class="hidden md:flex items-center gap-space-lg">
-      <li class="nav-guest-only"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="login.html">Login</a></li>
-      <li class="nav-guest-only"><a class="px-space-md py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md" href="register.html">Sign Up</a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="dashboard.html">Dashboard</a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-primary font-bold" href="browse.html">Browse</a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="requests.html">Requests</a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="profile.html">Profile</a></li>
-      <li class="nav-admin-only hidden"><a class="font-label-md text-label-md text-primary font-bold" href="admin.html">Admin</a></li>
+      <li class="nav-guest-only"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="login.html" data-i18n="nav.login">Login</a></li>
+      <li class="nav-guest-only"><a class="px-space-md py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md" href="register.html" data-i18n="nav.signup">Sign Up</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-primary font-bold" href="browse.html" data-i18n="nav.browse">Browse</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="requests.html" data-i18n="nav.requests">Requests</a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="profile.html" data-i18n="nav.profile">Profile</a></li>
+      <li class="nav-admin-only hidden"><a class="font-label-md text-label-md text-primary font-bold" href="admin.html" data-i18n="nav.admin">Admin</a></li>
       <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary flex items-center gap-1" href="#" id="logout-btn"><span class="material-symbols-outlined text-[18px]">logout</span>Logout (<span id="nav-user-name"></span>)</a></li>
     </ul>
   </div>
@@ -40,22 +50,22 @@
 
 <main class="flex-grow max-w-7xl mx-auto w-full px-space-lg md:px-margin py-space-xl">
   <div class="mb-space-lg">
-    <h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Browse Peers</h1>
-    <p class="font-body-md text-body-md text-on-surface-variant">Find someone who teaches what you want to learn.</p>
+    <h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight" data-i18n="browse.title">Browse Peers</h1>
+    <p class="font-body-md text-body-md text-on-surface-variant" data-i18n="browse.subtitle">Find someone who teaches what you want to learn.</p>
   </div>
 
   <div class="flex flex-col sm:flex-row gap-space-md mb-space-xl">
     <div class="relative flex-1">
       <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
-      <input id="search-input" type="text" placeholder="Search by name, skill, or bio..." class="w-full pl-10 pr-3 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"/>
+      <input id="search-input" type="text" placeholder="Search by name, skill, or bio..." data-i18n-placeholder="browse.searchPlaceholder" class="w-full pl-10 pr-3 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"/>
     </div>
     <select id="skill-filter" class="sm:w-64 px-3 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all">
-      <option value="">All skills</option>
+      <option value="" data-i18n="browse.allSkills">All skills</option>
     </select>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg" id="browse-grid"></div>
-  <p id="browse-empty" class="hidden text-center text-on-surface-variant font-body-md py-space-2xl">No peers match your search yet.</p>
+  <p id="browse-empty" class="hidden text-center text-on-surface-variant font-body-md py-space-2xl" data-i18n="browse.noResults">No peers match your search yet.</p>
 </main>
 
 <div id="request-modal" class="hidden fixed inset-0 bg-on-surface/50 flex items-center justify-center z-50 p-space-md">
@@ -66,37 +76,38 @@
     <h2 id="request-modal-title" class="font-headline-sm text-headline-sm text-on-surface mb-space-md">Request a session</h2>
     <form id="request-form" class="space-y-space-md">
       <div>
-        <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="skill">Skill</label>
+        <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="skill" data-i18n="browse.modalSkill">Skill</label>
         <select id="skill" name="skill" required class="w-full px-3 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"></select>
       </div>
       <div class="grid grid-cols-2 gap-space-md">
         <div>
-          <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="date">Proposed date</label>
+          <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="date" data-i18n="browse.proposedDate">Proposed date</label>
           <input id="date" name="date" type="date" class="w-full px-3 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"/>
         </div>
         <div>
-          <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="time">Proposed time</label>
+          <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="time" data-i18n="browse.proposedTime">Proposed time</label>
           <input id="time" name="time" type="time" class="w-full px-3 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"/>
         </div>
       </div>
       <div>
-        <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="message">Message</label>
-        <textarea id="message" name="message" rows="3" placeholder="What would you like to cover?" class="w-full p-space-md bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"></textarea>
+        <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="message" data-i18n="browse.message">Message</label>
+        <textarea id="message" name="message" rows="3" placeholder="What would you like to cover?" data-i18n-placeholder="browse.messagePlaceholder" class="w-full p-space-md bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"></textarea>
       </div>
-      <button type="submit" class="w-full py-2.5 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-md text-label-md transition-all">Send Request</button>
+      <button type="submit" class="w-full py-2.5 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-md text-label-md transition-all" data-i18n="browse.sendRequest">Send Request</button>
     </form>
   </div>
 </div>
 
 <footer class="bg-surface-container border-t border-outline-variant">
   <div class="max-w-7xl mx-auto px-space-lg md:px-margin py-space-lg text-center">
-    <span class="font-body-sm text-body-sm text-on-surface-variant">© 2026 PeerXchange. Student Skill Exchange / Peer Tutoring Marketplace.</span>
+    <span class="font-body-sm text-body-sm text-on-surface-variant">© 2026 <span data-i18n="footer.text">Zen. Student Skill Exchange / Peer Tutoring Marketplace.</span></span>
   </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
 <script src="js/app.js"></script>
+<script src="js/i18n.js"></script>
 <script src="js/nav.js"></script>
 <script src="js/browse.js"></script>
 </body>

@@ -1,4 +1,4 @@
-# PeerXchange — Student Skill Exchange / Peer Tutoring Marketplace
+# Zen — Student Skill Exchange / Peer Tutoring Marketplace
 
 A web platform that connects students who can teach a skill with students who
 want to learn it. Users create a profile listing skills they can teach and

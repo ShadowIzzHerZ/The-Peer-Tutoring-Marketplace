@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         ? 'bg-tag-learn-bg text-tag-learn-text border-tag-learn-border'
         : 'bg-tag-teach-bg text-tag-teach-text border-tag-teach-border';
     if (!skills || skills.length === 0) {
-      return '<span class="px-2.5 py-1 rounded-full border border-outline-variant bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm">None</span>';
+      return `<span class="px-2.5 py-1 rounded-full border border-outline-variant bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm">${t('browse.none')}</span>`;
     }
     return skills
       .map(
@@ -87,21 +87,21 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div>
             <h3 class="font-headline-sm text-headline-sm text-on-surface">${escapeHtml(u.name)}</h3>
             <div class="font-body-sm text-body-sm text-secondary flex items-center gap-1">
-              ${rating ? `<span class="material-symbols-outlined text-[16px] text-primary">star</span>${rating.toFixed(1)}` : 'No ratings yet'}
+              ${rating ? `<span class="material-symbols-outlined text-[16px] text-primary">star</span>${rating.toFixed(1)}` : t('browse.noRatingsYet')}
             </div>
           </div>
         </div>
-        <p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md min-h-[40px]">${escapeHtml(u.bio || 'No bio provided.')}</p>
+        <p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md min-h-[40px]">${escapeHtml(u.bio) || t('browse.noBioProvided')}</p>
         <div class="mb-space-sm">
-          <p class="font-label-sm text-label-sm text-on-primary-fixed-variant font-bold uppercase tracking-wider mb-1.5">Can teach</p>
+          <p class="font-label-sm text-label-sm text-on-primary-fixed-variant font-bold uppercase tracking-wider mb-1.5">${t('browse.canTeach')}</p>
           <div class="flex flex-wrap gap-1.5">${tagPills(u.skills_teach, 'teach')}</div>
         </div>
         <div class="mb-space-md">
-          <p class="font-label-sm text-label-sm text-tag-learn-text font-bold uppercase tracking-wider mb-1.5">Wants to learn</p>
+          <p class="font-label-sm text-label-sm text-tag-learn-text font-bold uppercase tracking-wider mb-1.5">${t('browse.wantsToLearn')}</p>
           <div class="flex flex-wrap gap-1.5">${tagPills(u.skills_learn, 'learn')}</div>
         </div>
       </div>
-      <button type="button" class="request-btn w-full py-2 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-md text-label-md transition-all">Request Session</button>
+      <button type="button" class="request-btn w-full py-2 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-md text-label-md transition-all">${t('browse.requestSession')}</button>
     `;
 
     card.querySelector('.request-btn').addEventListener('click', () => openRequestModal(u));
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const skillSelect = form.skill;
     const titleEl = document.getElementById('request-modal-title');
 
-    titleEl.textContent = `Request a session with ${tutor.name}`;
+    titleEl.textContent = `${t('browse.requestSessionWith')} ${tutor.name}`;
     skillSelect.innerHTML = '';
     (tutor.skills_teach && tutor.skills_teach.length ? tutor.skills_teach : ['General']).forEach((s) => {
       const opt = document.createElement('option');
@@ -161,10 +161,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     closeRequestModal();
-    showToast('Session request sent!');
+    showToast(t('browse.sessionRequestSent'));
   });
 
   searchInput.addEventListener('input', render);
   skillFilter.addEventListener('change', render);
   render();
+  document.addEventListener('zen:languagechange', render);
 });

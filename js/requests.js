@@ -72,9 +72,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     wrap.appendChild(starsWrap);
 
     wrap.appendChild(
-      makeActionButton('Submit Rating', 'primary', () => {
+      makeActionButton(t('requests.submitRating'), 'primary', () => {
         if (selected === 0) {
-          showToast('Pick a star rating first.');
+          showToast(t('requests.pickStarFirst'));
           return;
         }
         updateRequest(r.id, { rating: selected });
@@ -89,10 +89,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     card.innerHTML = `
       <div class="flex items-center justify-between mb-space-sm">
         <strong class="font-headline-sm text-headline-sm text-on-surface">${escapeHtml(otherName)}</strong>
-        <span class="${statusBadgeClass(r.status)}">${r.status}</span>
+        <span class="${statusBadgeClass(r.status)}">${t('status.' + r.status)}</span>
       </div>
-      <p class="font-body-md text-body-md text-on-surface"><strong>Skill:</strong> ${escapeHtml(r.skill)}</p>
-      <p class="font-body-md text-body-md text-on-surface-variant"><strong>Proposed:</strong> ${formatDate(r.proposed_date, r.proposed_time)}</p>
+      <p class="font-body-md text-body-md text-on-surface"><strong>${t('admin.skill')}:</strong> ${escapeHtml(r.skill)}</p>
+      <p class="font-body-md text-body-md text-on-surface-variant"><strong>${t('admin.proposed')}:</strong> ${formatDate(r.proposed_date, r.proposed_time)}</p>
       ${r.message ? `<p class="font-body-sm text-body-sm text-on-surface-variant italic mt-1">"${escapeHtml(r.message)}"</p>` : ''}
       <div class="request-actions flex items-center gap-2 mt-space-md flex-wrap"></div>
     `;
@@ -105,11 +105,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   function buildReceivedCard(r) {
     return buildCard(r, r.from_profile ? r.from_profile.name : 'Unknown user', (actions) => {
       if (r.status === 'pending') {
-        actions.appendChild(makeActionButton('Accept', 'primary', () => updateRequest(r.id, { status: 'accepted' })));
-        actions.appendChild(makeActionButton('Decline', 'outline', () => updateRequest(r.id, { status: 'declined' })));
+        actions.appendChild(makeActionButton(t('requests.accept'), 'primary', () => updateRequest(r.id, { status: 'accepted' })));
+        actions.appendChild(makeActionButton(t('requests.decline'), 'outline', () => updateRequest(r.id, { status: 'declined' })));
       } else if (r.status === 'accepted') {
         actions.appendChild(
-          makeActionButton('Mark Completed', 'primary', () => updateRequest(r.id, { status: 'completed' }))
+          makeActionButton(t('requests.markCompleted'), 'primary', () => updateRequest(r.id, { status: 'completed' }))
         );
       }
     });
@@ -118,13 +118,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   function buildSentCard(r) {
     return buildCard(r, r.to_profile ? r.to_profile.name : 'Unknown user', (actions) => {
       if (r.status === 'pending') {
-        actions.appendChild(makeActionButton('Cancel', 'outline', () => updateRequest(r.id, { status: 'cancelled' })));
+        actions.appendChild(makeActionButton(t('requests.cancel'), 'outline', () => updateRequest(r.id, { status: 'cancelled' })));
       } else if (r.status === 'completed' && r.rating == null) {
         actions.appendChild(buildRatingWidget(r));
       } else if (r.status === 'completed' && r.rating != null) {
         const p = document.createElement('p');
         p.className = 'font-body-sm text-body-sm text-on-surface-variant';
-        p.textContent = `You rated this session ${r.rating}/5`;
+        p.textContent = `${t('requests.youRated')} ${r.rating}/5`;
         actions.appendChild(p);
       }
     });
@@ -157,4 +157,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   render();
+  document.addEventListener('zen:languagechange', render);
 });

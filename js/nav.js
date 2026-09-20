@@ -31,7 +31,34 @@ async function requireAdmin() {
   return profile;
 }
 
+function initThemeToggle() {
+  const toggle = document.getElementById('theme-toggle');
+  if (!toggle) return;
+  const icon = toggle.querySelector('.theme-icon');
+
+  function updateIcon() {
+    icon.textContent = document.documentElement.classList.contains('dark') ? 'light_mode' : 'dark_mode';
+  }
+  updateIcon();
+
+  toggle.addEventListener('click', () => {
+    toggle.classList.add('switching');
+    setTimeout(() => {
+      document.documentElement.classList.toggle('dark');
+      try {
+        localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      } catch (e) {
+        /* localStorage unavailable */
+      }
+      updateIcon();
+      toggle.classList.remove('switching');
+    }, 150);
+  });
+}
+
 async function initNav() {
+  initThemeToggle();
+
   const menuToggle = document.getElementById('menu-toggle');
   const navLinks = document.getElementById('nav-links');
   if (menuToggle && navLinks) {

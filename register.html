@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Sign Up | PeerXchange</title>
+<script src="js/theme-init.js"></script>
+<title>Sign Up | Zen</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet"/>
@@ -11,6 +12,7 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="js/tailwind-config.js"></script>
 <link rel="stylesheet" href="css/extra.css"/>
+<link rel="stylesheet" href="css/theme.css"/>
 </head>
 <body class="bg-background text-on-surface font-body-md text-body-md antialiased min-h-screen flex flex-col justify-between selection:bg-primary-fixed selection:text-on-primary-fixed">
 
@@ -20,12 +22,20 @@
       <div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-on-primary group-hover:bg-primary-container transition-colors duration-150">
         <span class="material-symbols-outlined text-[20px]">swap_horiz</span>
       </div>
-      <span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">PeerXchange</span>
+      <span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">Zen</span>
     </a>
     <div class="flex items-center gap-space-xs text-body-sm font-body-sm">
-      <span class="text-on-surface-variant hidden sm:inline">Already have an account?</span>
+      <select id="lang-switcher" class="bg-transparent border border-outline-variant rounded-lg text-label-sm font-label-sm text-on-surface px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+        <option value="es">Español</option>
+      </select>
+      <button id="theme-toggle" class="text-on-surface hover:bg-surface-container-low rounded-lg p-2 transition-colors" aria-label="Toggle dark mode" type="button">
+        <span class="material-symbols-outlined theme-icon text-2xl">dark_mode</span>
+      </button>
+      <span class="text-on-surface-variant hidden sm:inline" data-i18n="register.alreadyHaveAccount">Already have an account?</span>
       <a class="font-label-md text-label-md text-primary hover:text-primary-container font-semibold transition-colors duration-150 flex items-center gap-1" href="login.html">
-        Log In
+        <span data-i18n="register.logIn">Log In</span>
         <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
       </a>
     </div>
@@ -37,12 +47,12 @@
     <div class="mb-space-lg text-center max-w-2xl mx-auto">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-status-active-bg text-status-active text-label-sm font-label-sm mb-space-sm border border-outline-variant">
         <span class="w-1.5 h-1.5 rounded-full bg-status-active animate-pulse"></span>
-        Peer Learning Network
+        <span data-i18n="register.badge">Peer Learning Network</span>
       </div>
-      <h1 class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight mb-space-xs">
+      <h1 class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight mb-space-xs" data-i18n="register.title">
         Join the exchange
       </h1>
-      <p class="font-body-md text-body-md text-on-surface-variant">
+      <p class="font-body-md text-body-md text-on-surface-variant" data-i18n="register.subtitle">
         Trade what you master for what you wish to learn. No currency, just reciprocal student collaboration.
       </p>
     </div>
@@ -61,24 +71,24 @@
           <div class="border-b border-outline-variant pb-space-lg">
             <h2 class="font-headline-sm text-headline-sm font-semibold text-on-surface mb-space-md flex items-center gap-2">
               <span class="w-6 h-6 rounded-full bg-surface-container-high text-primary font-bold text-label-sm flex items-center justify-center">1</span>
-              Your Credentials
+              <span data-i18n="register.credentials">Your Credentials</span>
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
               <div>
-                <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="fullName">Full Name <span class="text-primary">*</span></label>
+                <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="fullName"><span data-i18n="register.fullName">Full Name</span> <span class="text-primary">*</span></label>
                 <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-space-md py-2.5 text-on-surface placeholder-outline focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all text-body-md font-body-md" id="fullName" placeholder="e.g. Aisha Khan" required type="text"/>
               </div>
               <div>
-                <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="email">Email <span class="text-primary">*</span></label>
+                <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="email"><span data-i18n="register.email">Email</span> <span class="text-primary">*</span></label>
                 <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-space-md py-2.5 text-on-surface placeholder-outline focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all text-body-md font-body-md" id="email" placeholder="you@example.com" required type="email"/>
               </div>
               <div>
-                <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="password">Password <span class="text-primary">*</span></label>
+                <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="password"><span data-i18n="register.password">Password</span> <span class="text-primary">*</span></label>
                 <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-space-md py-2.5 text-on-surface placeholder-outline focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all text-body-md font-body-md" id="password" minlength="6" placeholder="••••••••" required type="password"/>
-                <p class="mt-1 font-body-sm text-body-sm text-on-surface-variant">Minimum 6 characters.</p>
+                <p class="mt-1 font-body-sm text-body-sm text-on-surface-variant" data-i18n="register.passwordHint">Minimum 6 characters.</p>
               </div>
               <div>
-                <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="confirmPassword">Confirm Password <span class="text-primary">*</span></label>
+                <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="confirmPassword"><span data-i18n="register.confirmPassword">Confirm Password</span> <span class="text-primary">*</span></label>
                 <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-space-md py-2.5 text-on-surface placeholder-outline focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all text-body-md font-body-md" id="confirmPassword" minlength="6" placeholder="••••••••" required type="password"/>
               </div>
             </div>
@@ -87,18 +97,18 @@
           <div class="border-b border-outline-variant pb-space-lg">
             <h2 class="font-headline-sm text-headline-sm font-semibold text-on-surface mb-space-md flex items-center gap-2">
               <span class="w-6 h-6 rounded-full bg-surface-container-high text-primary font-bold text-label-sm flex items-center justify-center">2</span>
-              Short Bio
+              <span data-i18n="register.bioSection">Short Bio</span>
             </h2>
-            <textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-space-md text-on-surface placeholder-outline focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all text-body-md font-body-md" id="bio" placeholder="Tell other students what you study and how you like to collaborate..." rows="3"></textarea>
+            <textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-space-md text-on-surface placeholder-outline focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all text-body-md font-body-md" id="bio" data-i18n-placeholder="register.bioPlaceholder" placeholder="Tell other students what you study and how you like to collaborate..." rows="3"></textarea>
           </div>
 
           <div class="space-y-space-lg">
             <div>
               <h2 class="font-headline-sm text-headline-sm font-semibold text-on-surface mb-1 flex items-center gap-2">
                 <span class="w-6 h-6 rounded-full bg-surface-container-high text-primary font-bold text-label-sm flex items-center justify-center">3</span>
-                Skill Exchange
+                <span data-i18n="register.skillExchange">Skill Exchange</span>
               </h2>
-              <p class="text-body-sm font-body-sm text-on-surface-variant mb-space-md">
+              <p class="text-body-sm font-body-sm text-on-surface-variant mb-space-md" data-i18n="register.skillExchangeBody">
                 You must offer at least one skill you can teach to the community.
               </p>
             </div>
@@ -107,9 +117,9 @@
               <div class="flex items-center justify-between mb-space-sm">
                 <div class="flex items-center gap-2">
                   <span class="inline-flex items-center gap-1 font-label-md text-label-md text-tag-teach-text bg-tag-teach-bg px-2.5 py-0.5 rounded-full border border-tag-teach-border">
-                    <span class="material-symbols-outlined text-[16px]">north_east</span>Offers
+                    <span class="material-symbols-outlined text-[16px]">north_east</span><span data-i18n="register.offers">Offers</span>
                   </span>
-                  <span class="font-headline-sm text-headline-sm text-on-surface">Skills you can teach</span>
+                  <span class="font-headline-sm text-headline-sm text-on-surface" data-i18n="register.canTeach">Skills you can teach</span>
                 </div>
               </div>
               <div class="flex flex-wrap gap-2 items-center mb-space-sm min-h-[38px]" id="teachSkillsList"></div>
@@ -125,9 +135,9 @@
               <div class="flex items-center justify-between mb-space-sm">
                 <div class="flex items-center gap-2">
                   <span class="inline-flex items-center gap-1 font-label-md text-label-md text-tag-learn-text bg-tag-learn-bg px-2.5 py-0.5 rounded-full border border-tag-learn-border">
-                    <span class="material-symbols-outlined text-[16px]">south_west</span>Seeking
+                    <span class="material-symbols-outlined text-[16px]">south_west</span><span data-i18n="register.seeking">Seeking</span>
                   </span>
-                  <span class="font-headline-sm text-headline-sm text-on-surface">Skills you want to learn</span>
+                  <span class="font-headline-sm text-headline-sm text-on-surface" data-i18n="register.wantToLearn">Skills you want to learn</span>
                 </div>
               </div>
               <div class="flex flex-wrap gap-2 items-center mb-space-sm min-h-[38px]" id="learnSkillsList"></div>
@@ -143,10 +153,10 @@
           <div class="pt-space-sm flex flex-col sm:flex-row items-center justify-between gap-space-md">
             <div class="flex items-center gap-2 text-body-sm font-body-sm text-on-surface-variant">
               <span class="material-symbols-outlined text-status-active text-[18px]">lock</span>
-              <span>Secured by Supabase Auth</span>
+              <span data-i18n="register.secured">Secured by Supabase Auth</span>
             </div>
             <button class="w-full sm:w-auto px-space-xl py-3 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold hover:bg-primary-container transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-2" type="submit">
-              <span>Create Account</span>
+              <span data-i18n="register.createAccount">Create Account</span>
               <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
             </button>
           </div>
@@ -162,17 +172,17 @@
             <span class="material-symbols-outlined text-status-active text-[18px]">check</span>
           </div>
         </div>
-        <h2 class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight mb-space-xs">Check your email</h2>
+        <h2 class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight mb-space-xs" data-i18n="register.checkEmailTitle">Check your email</h2>
         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm mb-space-md border border-outline-variant">
           <span class="material-symbols-outlined text-[16px] text-primary">mail</span>
-          Sent to <span class="font-bold text-on-surface" id="displayEmail"></span>
+          <span data-i18n="register.checkEmailSentTo">Sent to</span> <span class="font-bold text-on-surface" id="displayEmail"></span>
         </div>
-        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg mx-auto mb-space-lg">
+        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg mx-auto mb-space-lg" data-i18n="register.checkEmailBody">
           Click the confirmation link we just sent, then come back and log in.
         </p>
         <a class="inline-flex px-space-lg py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-primary-container transition-all items-center justify-center gap-2" href="login.html">
           <span class="material-symbols-outlined text-[18px]">login</span>
-          <span>Back to Login</span>
+          <span data-i18n="register.backToLogin">Back to Login</span>
         </a>
       </div>
     </div>
@@ -181,13 +191,14 @@
 
 <footer class="bg-surface-container border-t border-outline-variant">
   <div class="flex flex-col md:flex-row justify-between items-center w-full px-space-lg md:px-margin py-space-lg max-w-7xl mx-auto gap-4">
-    <span class="font-body-sm text-body-sm text-on-surface-variant">© 2026 PeerXchange. Student Skill Exchange / Peer Tutoring Marketplace.</span>
+    <span class="font-body-sm text-body-sm text-on-surface-variant">© 2026 <span data-i18n="footer.text">Zen. Student Skill Exchange / Peer Tutoring Marketplace.</span></span>
   </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
 <script src="js/app.js"></script>
+<script src="js/i18n.js"></script>
 <script src="js/nav.js"></script>
 <script src="js/register.js"></script>
 </body>
