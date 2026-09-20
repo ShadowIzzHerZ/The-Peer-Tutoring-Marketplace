@@ -33,6 +33,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     skillFilter.appendChild(opt);
   });
 
+  function tagPills(skills, variant) {
+    const cls =
+      variant === 'learn'
+        ? 'bg-tag-learn-bg text-tag-learn-text border-tag-learn-border'
+        : 'bg-tag-teach-bg text-tag-teach-text border-tag-teach-border';
+    if (!skills || skills.length === 0) {
+      return '<span class="px-2.5 py-1 rounded-full border border-outline-variant bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm">None</span>';
+    }
+    return skills
+      .map(
+        (s) =>
+          `<span class="px-2.5 py-1 rounded-full border text-label-sm font-label-sm font-medium ${cls}">${escapeHtml(s)}</span>`
+      )
+      .join('');
+  }
+
   function render() {
     const query = searchInput.value.trim().toLowerCase();
     const skill = skillFilter.value;
@@ -53,7 +69,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function buildProfileCard(u) {
     const card = document.createElement('div');
-    card.className = 'card profile-card';
+    card.className =
+      'custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg flex flex-col justify-between';
 
     const rating = ratingCache[u.id];
     const initials = u.name
@@ -64,30 +81,27 @@ document.addEventListener('DOMContentLoaded', async () => {
       .toUpperCase();
 
     card.innerHTML = `
-      <div class="profile-card-header">
-        <div class="avatar">${escapeHtml(initials)}</div>
-        <div>
-          <h3>${escapeHtml(u.name)}</h3>
-          <div class="rating-line">${rating ? '⭐ ' + rating.toFixed(1) : 'No ratings yet'}</div>
+      <div>
+        <div class="flex items-center gap-space-sm mb-space-md">
+          <div class="w-12 h-12 rounded-full bg-tag-teach-bg border border-outline-variant flex items-center justify-center font-headline-sm text-headline-sm font-bold text-tag-teach-text flex-shrink-0">${escapeHtml(initials)}</div>
+          <div>
+            <h3 class="font-headline-sm text-headline-sm text-on-surface">${escapeHtml(u.name)}</h3>
+            <div class="font-body-sm text-body-sm text-secondary flex items-center gap-1">
+              ${rating ? `<span class="material-symbols-outlined text-[16px] text-primary">star</span>${rating.toFixed(1)}` : 'No ratings yet'}
+            </div>
+          </div>
+        </div>
+        <p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md min-h-[40px]">${escapeHtml(u.bio || 'No bio provided.')}</p>
+        <div class="mb-space-sm">
+          <p class="font-label-sm text-label-sm text-on-primary-fixed-variant font-bold uppercase tracking-wider mb-1.5">Can teach</p>
+          <div class="flex flex-wrap gap-1.5">${tagPills(u.skills_teach, 'teach')}</div>
+        </div>
+        <div class="mb-space-md">
+          <p class="font-label-sm text-label-sm text-tag-learn-text font-bold uppercase tracking-wider mb-1.5">Wants to learn</p>
+          <div class="flex flex-wrap gap-1.5">${tagPills(u.skills_learn, 'learn')}</div>
         </div>
       </div>
-      <p class="profile-bio">${escapeHtml(u.bio || 'No bio provided.')}</p>
-      <div class="skill-block">
-        <span class="skill-label">Can teach</span>
-        <div class="tag-list">${
-          (u.skills_teach || []).map((s) => `<span class="tag">${escapeHtml(s)}</span>`).join('') ||
-          '<span class="tag tag-empty">None</span>'
-        }</div>
-      </div>
-      <div class="skill-block">
-        <span class="skill-label">Wants to learn</span>
-        <div class="tag-list">${
-          (u.skills_learn || [])
-            .map((s) => `<span class="tag tag-outline">${escapeHtml(s)}</span>`)
-            .join('') || '<span class="tag tag-empty">None</span>'
-        }</div>
-      </div>
-      <button class="btn btn-primary request-btn" type="button">Request Session</button>
+      <button type="button" class="request-btn w-full py-2 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-md text-label-md transition-all">Request Session</button>
     `;
 
     card.querySelector('.request-btn').addEventListener('click', () => openRequestModal(u));
@@ -130,7 +144,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     submitBtn.disabled = true;
 
-    const { error } = await sb.from('requests').insert({
+    const { error: insertError } = await sb.from('requests').insert({
       from_user_id: currentUser.id,
       to_user_id: tutorId,
       skill: form.skill.value,
@@ -141,8 +155,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     submitBtn.disabled = false;
 
-    if (error) {
-      showToast(error.message);
+    if (insertError) {
+      showToast(insertError.message);
       return;
     }
 

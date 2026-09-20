@@ -26,13 +26,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     for (const u of users) {
       const rating = await getAverageRating(u.id);
       const tr = document.createElement('tr');
+      tr.className = 'border-b border-outline-variant last:border-0';
       tr.innerHTML = `
-        <td>${escapeHtml(u.name)}</td>
-        <td>${escapeHtml(u.email)}</td>
-        <td>${(u.skills_teach || []).length}</td>
-        <td>${(u.skills_learn || []).length}</td>
-        <td>${rating ? rating.toFixed(1) : '—'}</td>
-        <td><button class="btn btn-outline btn-sm" type="button">Remove</button></td>
+        <td class="py-2.5 pr-4 font-body-sm text-body-sm text-on-surface">${escapeHtml(u.name)}</td>
+        <td class="py-2.5 pr-4 font-body-sm text-body-sm text-on-surface-variant">${escapeHtml(u.email)}</td>
+        <td class="py-2.5 pr-4 font-body-sm text-body-sm text-on-surface">${(u.skills_teach || []).length}</td>
+        <td class="py-2.5 pr-4 font-body-sm text-body-sm text-on-surface">${(u.skills_learn || []).length}</td>
+        <td class="py-2.5 pr-4 font-body-sm text-body-sm text-on-surface">${rating ? rating.toFixed(1) : '—'}</td>
+        <td class="py-2.5"><button type="button" class="px-3 py-1 border border-outline text-on-surface rounded-lg font-label-sm text-label-sm hover:bg-surface-container-low transition-all">Remove</button></td>
       `;
       tr.querySelector('button').addEventListener('click', () => removeUser(u.id));
       tbody.appendChild(tr);
@@ -54,12 +55,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     requests.forEach((r) => {
       const tr = document.createElement('tr');
+      tr.className = 'border-b border-outline-variant last:border-0';
       tr.innerHTML = `
-        <td>${escapeHtml(r.from_profile ? r.from_profile.name : '—')}</td>
-        <td>${escapeHtml(r.to_profile ? r.to_profile.name : '—')}</td>
-        <td>${escapeHtml(r.skill)}</td>
-        <td>${formatDate(r.proposed_date, r.proposed_time)}</td>
-        <td><span class="${statusBadgeClass(r.status)}">${r.status}</span></td>
+        <td class="py-2.5 pr-4 font-body-sm text-body-sm text-on-surface">${escapeHtml(r.from_profile ? r.from_profile.name : '—')}</td>
+        <td class="py-2.5 pr-4 font-body-sm text-body-sm text-on-surface">${escapeHtml(r.to_profile ? r.to_profile.name : '—')}</td>
+        <td class="py-2.5 pr-4 font-body-sm text-body-sm text-on-surface">${escapeHtml(r.skill)}</td>
+        <td class="py-2.5 pr-4 font-body-sm text-body-sm text-on-surface-variant">${formatDate(r.proposed_date, r.proposed_time)}</td>
+        <td class="py-2.5"><span class="${statusBadgeClass(r.status)}">${r.status}</span></td>
       `;
       tbody.appendChild(tr);
     });

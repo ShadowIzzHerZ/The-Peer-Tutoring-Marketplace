@@ -3,10 +3,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!currentUser) return;
 
   const tabs = document.querySelectorAll('.tab-btn');
+  const activeClasses = ['text-primary', 'border-primary'];
+  const inactiveClasses = ['text-on-surface-variant', 'border-transparent'];
+
   tabs.forEach((tab) => {
     tab.addEventListener('click', () => {
-      tabs.forEach((t) => t.classList.remove('active'));
-      tab.classList.add('active');
+      tabs.forEach((t) => {
+        t.classList.remove(...activeClasses);
+        t.classList.add(...inactiveClasses);
+      });
+      tab.classList.remove(...inactiveClasses);
+      tab.classList.add(...activeClasses);
+
       document.querySelectorAll('.tab-panel').forEach((p) => p.classList.add('hidden'));
       document.getElementById(tab.dataset.target).classList.remove('hidden');
     });
@@ -30,35 +38,41 @@ document.addEventListener('DOMContentLoaded', async () => {
     return error ? [] : data;
   }
 
-  function makeActionButton(label, cls, onClick) {
+  function makeActionButton(label, variant, onClick) {
     const btn = document.createElement('button');
-    btn.className = `btn ${cls} btn-sm`;
     btn.type = 'button';
     btn.textContent = label;
+    btn.className =
+      variant === 'primary'
+        ? 'px-3 py-1.5 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-sm text-label-sm transition-all'
+        : 'px-3 py-1.5 border border-outline text-on-surface rounded-lg font-label-sm text-label-sm hover:bg-surface-container-low transition-all';
     btn.addEventListener('click', onClick);
     return btn;
   }
 
   function buildRatingWidget(r) {
     const wrap = document.createElement('div');
-    wrap.className = 'rating-widget';
+    wrap.className = 'flex items-center gap-2';
     let selected = 0;
 
+    const starsWrap = document.createElement('div');
+    starsWrap.className = 'flex items-center gap-0.5';
     for (let i = 1; i <= 5; i++) {
       const star = document.createElement('span');
       star.className = 'star';
       star.textContent = '☆';
       star.addEventListener('click', () => {
         selected = i;
-        wrap.querySelectorAll('.star').forEach((s, idx) => {
+        starsWrap.querySelectorAll('.star').forEach((s, idx) => {
           s.textContent = idx < selected ? '★' : '☆';
         });
       });
-      wrap.appendChild(star);
+      starsWrap.appendChild(star);
     }
+    wrap.appendChild(starsWrap);
 
     wrap.appendChild(
-      makeActionButton('Submit Rating', 'btn-primary', () => {
+      makeActionButton('Submit Rating', 'primary', () => {
         if (selected === 0) {
           showToast('Pick a star rating first.');
           return;
@@ -69,58 +83,51 @@ document.addEventListener('DOMContentLoaded', async () => {
     return wrap;
   }
 
-  function buildReceivedCard(r) {
+  function buildCard(r, otherName, actionsBuilder) {
     const card = document.createElement('div');
-    card.className = 'card request-card';
+    card.className = 'bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg';
     card.innerHTML = `
-      <div class="request-card-header">
-        <strong>${escapeHtml(r.from_profile ? r.from_profile.name : 'Unknown user')}</strong>
+      <div class="flex items-center justify-between mb-space-sm">
+        <strong class="font-headline-sm text-headline-sm text-on-surface">${escapeHtml(otherName)}</strong>
         <span class="${statusBadgeClass(r.status)}">${r.status}</span>
       </div>
-      <p><strong>Skill:</strong> ${escapeHtml(r.skill)}</p>
-      <p><strong>Proposed:</strong> ${formatDate(r.proposed_date, r.proposed_time)}</p>
-      ${r.message ? `<p class="request-message">"${escapeHtml(r.message)}"</p>` : ''}
-      <div class="request-actions"></div>
+      <p class="font-body-md text-body-md text-on-surface"><strong>Skill:</strong> ${escapeHtml(r.skill)}</p>
+      <p class="font-body-md text-body-md text-on-surface-variant"><strong>Proposed:</strong> ${formatDate(r.proposed_date, r.proposed_time)}</p>
+      ${r.message ? `<p class="font-body-sm text-body-sm text-on-surface-variant italic mt-1">"${escapeHtml(r.message)}"</p>` : ''}
+      <div class="request-actions flex items-center gap-2 mt-space-md flex-wrap"></div>
     `;
 
     const actions = card.querySelector('.request-actions');
-    if (r.status === 'pending') {
-      actions.appendChild(makeActionButton('Accept', 'btn-primary', () => updateRequest(r.id, { status: 'accepted' })));
-      actions.appendChild(makeActionButton('Decline', 'btn-outline', () => updateRequest(r.id, { status: 'declined' })));
-    } else if (r.status === 'accepted') {
-      actions.appendChild(
-        makeActionButton('Mark Completed', 'btn-primary', () => updateRequest(r.id, { status: 'completed' }))
-      );
-    }
+    actionsBuilder(actions);
     return card;
   }
 
-  function buildSentCard(r) {
-    const card = document.createElement('div');
-    card.className = 'card request-card';
-    card.innerHTML = `
-      <div class="request-card-header">
-        <strong>${escapeHtml(r.to_profile ? r.to_profile.name : 'Unknown user')}</strong>
-        <span class="${statusBadgeClass(r.status)}">${r.status}</span>
-      </div>
-      <p><strong>Skill:</strong> ${escapeHtml(r.skill)}</p>
-      <p><strong>Proposed:</strong> ${formatDate(r.proposed_date, r.proposed_time)}</p>
-      ${r.message ? `<p class="request-message">"${escapeHtml(r.message)}"</p>` : ''}
-      <div class="request-actions"></div>
-    `;
+  function buildReceivedCard(r) {
+    return buildCard(r, r.from_profile ? r.from_profile.name : 'Unknown user', (actions) => {
+      if (r.status === 'pending') {
+        actions.appendChild(makeActionButton('Accept', 'primary', () => updateRequest(r.id, { status: 'accepted' })));
+        actions.appendChild(makeActionButton('Decline', 'outline', () => updateRequest(r.id, { status: 'declined' })));
+      } else if (r.status === 'accepted') {
+        actions.appendChild(
+          makeActionButton('Mark Completed', 'primary', () => updateRequest(r.id, { status: 'completed' }))
+        );
+      }
+    });
+  }
 
-    const actions = card.querySelector('.request-actions');
-    if (r.status === 'pending') {
-      actions.appendChild(makeActionButton('Cancel', 'btn-outline', () => updateRequest(r.id, { status: 'cancelled' })));
-    } else if (r.status === 'completed' && r.rating == null) {
-      actions.appendChild(buildRatingWidget(r));
-    } else if (r.status === 'completed' && r.rating != null) {
-      const p = document.createElement('p');
-      p.className = 'rating-line';
-      p.textContent = `You rated this session ${r.rating}/5`;
-      actions.appendChild(p);
-    }
-    return card;
+  function buildSentCard(r) {
+    return buildCard(r, r.to_profile ? r.to_profile.name : 'Unknown user', (actions) => {
+      if (r.status === 'pending') {
+        actions.appendChild(makeActionButton('Cancel', 'outline', () => updateRequest(r.id, { status: 'cancelled' })));
+      } else if (r.status === 'completed' && r.rating == null) {
+        actions.appendChild(buildRatingWidget(r));
+      } else if (r.status === 'completed' && r.rating != null) {
+        const p = document.createElement('p');
+        p.className = 'font-body-sm text-body-sm text-on-surface-variant';
+        p.textContent = `You rated this session ${r.rating}/5`;
+        actions.appendChild(p);
+      }
+    });
   }
 
   async function updateRequest(id, changes) {
