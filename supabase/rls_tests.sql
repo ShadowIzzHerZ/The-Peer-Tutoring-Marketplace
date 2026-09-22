@@ -58,6 +58,9 @@ begin
 
   create temp table t_reqs (label text primary key, id uuid) on commit drop;
   grant select, insert, update on t_reqs to authenticated;
+
+  create temp table t_msgs (label text primary key, id uuid) on commit drop;
+  grant select, insert, update on t_msgs to authenticated;
 end $$;
 
 -- Swaps the simulated Supabase Auth identity for the rest of the transaction.
@@ -302,7 +305,106 @@ begin
 end $$;
 
 -- ============================================================================
--- All 20 checks above ran without an unhandled error, so every rule held.
+-- Messages: insert ownership, visibility, and the "only read_at can change"
+-- update trigger (validate_message_update)
+-- ============================================================================
+
+select pg_temp.act_as('a');
+do $$
+declare
+  new_id uuid;
+begin
+  insert into public.messages (sender_id, recipient_id, content)
+  values ((select id from t_ids where label = 'a'), (select id from t_ids where label = 'b'), 'Hey, are you free to swap Guitar for Python?')
+  returning id into new_id;
+  insert into t_msgs values ('main', new_id);
+  raise notice 'PASS: user A can send a message to user B';
+end $$;
+
+select pg_temp.act_as('a');
+do $$
+begin
+  begin
+    insert into public.messages (sender_id, recipient_id, content)
+    values ((select id from t_ids where label = 'b'), (select id from t_ids where label = 'a'), 'Impersonation');
+    raise exception 'TEST FAILED: user A should NOT be able to send a message impersonating user B as sender';
+  exception
+    when insufficient_privilege then
+      raise notice 'PASS: cannot impersonate another user as the message sender';
+  end;
+end $$;
+
+select pg_temp.act_as('a');
+do $$
+begin
+  begin
+    insert into public.messages (sender_id, recipient_id, content)
+    values ((select id from t_ids where label = 'a'), (select id from t_ids where label = 'a'), 'Talking to myself');
+    raise exception 'TEST FAILED: a self-message should be rejected by the no_self_message constraint';
+  exception
+    when check_violation then
+      raise notice 'PASS: self-messages are rejected';
+  end;
+end $$;
+
+select pg_temp.act_as('c');
+do $$
+declare
+  cnt int;
+begin
+  select count(*) into cnt from public.messages where id = (select id from t_msgs where label = 'main');
+  if cnt <> 0 then
+    raise exception 'TEST FAILED: an uninvolved user should not be able to see the message';
+  end if;
+  raise notice 'PASS: uninvolved users cannot see the message';
+end $$;
+
+select pg_temp.act_as('b');
+do $$
+declare
+  cnt int;
+begin
+  select count(*) into cnt from public.messages where id = (select id from t_msgs where label = 'main');
+  if cnt <> 1 then
+    raise exception 'TEST FAILED: the recipient should be able to see the message';
+  end if;
+  raise notice 'PASS: the recipient can see the message';
+end $$;
+
+select pg_temp.act_as('a');
+do $$
+begin
+  update public.messages set read_at = now() where id = (select id from t_msgs where label = 'main');
+  if found then
+    raise exception 'TEST FAILED: the sender should NOT be able to mark their own message as read';
+  end if;
+  raise notice 'PASS: the sender cannot mark their own message as read (only the recipient can)';
+end $$;
+
+select pg_temp.act_as('b');
+do $$
+begin
+  update public.messages set read_at = now() where id = (select id from t_msgs where label = 'main');
+  if not found then
+    raise exception 'TEST FAILED: the recipient should be able to mark the message as read';
+  end if;
+  raise notice 'PASS: the recipient can mark the message as read';
+end $$;
+
+select pg_temp.act_as('b');
+do $$
+begin
+  begin
+    update public.messages set content = 'edited by recipient' where id = (select id from t_msgs where label = 'main');
+    raise exception 'TEST FAILED: the recipient should NOT be able to change the message content';
+  exception
+    when raise_exception then
+      raise notice 'PASS: only read_at can be changed — content is protected even from the recipient';
+  end;
+end $$;
+
+-- ============================================================================
+-- All 27 checks above ran without an unhandled error, so every rule held.
 -- Roll back: none of this fixture data is meant to persist.
 -- ============================================================================
 rollback;

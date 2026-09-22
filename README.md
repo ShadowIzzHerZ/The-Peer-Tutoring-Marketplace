@@ -105,7 +105,9 @@ Security policies and triggers in `schema.sql` actually behave as designed —
 it acts as several different (throwaway) users inside Postgres and checks
 that every permission boundary holds (e.g. a user can't update someone else's
 profile, can't grant themselves admin, can't accept their own session
-request, can't rate a session that isn't completed, and so on).
+request, can't rate a session that isn't completed, can't read or send a
+direct message they're not part of, and can't edit a message's content when
+marking it read, and so on).
 
 Run it in the Supabase SQL editor. It runs inside a transaction that always
 ends in `ROLLBACK`, so it's safe to re-run at any time — it never leaves test

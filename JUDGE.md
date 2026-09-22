@@ -100,11 +100,13 @@ JavaScript trusting itself:
   as several different throwaway users inside Postgres and asserts that every
   boundary holds — cross-user profile edits are blocked, self-promotion to
   admin is blocked, only the tutor can accept/decline/complete a request,
-  only the requester can cancel or rate one, and invalid status transitions
-  are rejected. It runs inside a transaction that always ends in `ROLLBACK`,
+  only the requester can cancel or rate one, invalid status transitions are
+  rejected, no one can send or read a direct message they're not part of,
+  and only a message's recipient can mark it read (never its content or
+  participants). It runs inside a transaction that always ends in `ROLLBACK`,
   so it's safe to re-run anytime with no side effects. If every rule holds it
   finishes silently; if one breaks, it stops immediately naming exactly which
-  check failed. This was run against the live database and passed all 20
+  check failed. This was run against the live database and passed all 27
   checks before being committed.
 
 Full policy definitions are in `supabase/schema.sql`, commented to explain
@@ -171,7 +173,9 @@ which jumps straight into that conversation.
   limits every row to its two participants, an `insert` policy only lets you
   send as yourself, and an `update` policy plus a trigger
   (`validate_message_update`) together mean a recipient can flip `read_at`
-  to mark a message read but cannot alter who sent what to whom.
+  to mark a message read but cannot alter who sent what to whom. All of this
+  is covered by `supabase/rls_tests.sql` alongside the profile and request
+  checks (see [§5](#5-the-part-worth-asking-about-in-the-viva-security)).
 
 ## 10. Project structure
 
