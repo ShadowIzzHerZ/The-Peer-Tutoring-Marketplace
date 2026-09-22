@@ -10,8 +10,10 @@ requests, accept/decline/complete them, and rate completed sessions.
 - **Frontend:** plain HTML, CSS, JavaScript (no build step, no framework)
 - **Backend:** [Supabase](https://supabase.com) — Postgres database, Auth, and
   Row Level Security, called directly from the browser via `@supabase/supabase-js`
-- **Hosting:** static hosting (GitHub Pages) — the frontend talks to Supabase
-  directly, there is no separate server to deploy
+- **Hosting:** static hosting — currently deployed on [AWS Amplify
+  Hosting](#live-deployment); GitHub Pages works just as well since the
+  frontend talks to Supabase directly and there is no separate server to
+  deploy
 
 ## Features
 
@@ -28,6 +30,33 @@ requests, accept/decline/complete them, and rate completed sessions.
   - Only the tutor can accept/decline/complete a request
   - Only the requester can cancel a pending request or rate a completed one
   - A user cannot grant themselves admin
+
+## Live deployment
+
+The app is deployed and running on **AWS Amplify Hosting**:
+
+**https://main.d1lbffpnvsb54h.amplifyapp.com/**
+
+This is a snapshot deploy built directly from this repo's `main` branch — it
+is **not** connected to GitHub for continuous deployment, so pushing new
+commits won't update it automatically. To publish a newer snapshot, deploy
+the latest `main` branch archive to the same Amplify app
+(`appId: d1lbffpnvsb54h`, region `us-east-1`) via `StartDeployment` with
+`sourceUrl` set to:
+
+```
+https://github.com/ShadowIzzHerZ/The-Peer-Tutoring-Marketplace/archive/refs/heads/main.zip
+```
+
+(GitHub's archive zip nests everything under
+`The-Peer-Tutoring-Marketplace-main/`, which is why the app's `customRules`
+transparently rewrite `/` and `/<*>` into that folder — no build step is
+involved, so this works with the static files as-is.)
+
+For an auto-updating deployment instead, connect the same Amplify app to this
+GitHub repo via **Amplify Console → App settings → Branch connections**,
+which trades the manual redeploy step above for automatic builds on every
+push.
 
 ## Project structure
 
@@ -88,7 +117,10 @@ If you ever need to point this at a different Supabase project, run the SQL in
 `supabase/schema.sql` in the new project's SQL editor, then update
 `SUPABASE_URL` and `SUPABASE_ANON_KEY` in `js/config.js`.
 
-## Deployment (GitHub Pages)
+## Deployment (GitHub Pages alternative)
+
+The live deployment above runs on AWS Amplify, but the app is just static
+files, so GitHub Pages works too:
 
 1. Push this repo to GitHub.
 2. In the repo, go to **Settings → Pages**, set **Source** to the `main`

@@ -34,9 +34,10 @@ not just hidden/disabled in the UI — see [§5](#5-the-part-worth-asking-about-
 
 | | |
 |---|---|
+| **Live app** | https://main.d1lbffpnvsb54h.amplifyapp.com/ |
 | **Repository** | https://github.com/ShadowIzzHerZ/The-Peer-Tutoring-Marketplace |
 | **Database** | Supabase (Postgres + Auth + Row Level Security) |
-| **Hosting** | Static site — deployable to GitHub Pages or AWS Amplify with zero configuration (no build step, no server) |
+| **Hosting** | AWS Amplify Hosting — static site, zero build step, no server (see the README's [Live deployment](https://github.com/ShadowIzzHerZ/The-Peer-Tutoring-Marketplace/blob/main/README.md#live-deployment) section) |
 
 ## 3. Try it live — demo accounts
 
