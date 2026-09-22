@@ -1,90 +1,71 @@
-# Zen — Student Skill Exchange / Peer Tutoring Marketplace
+# Zen - Student Skill Exchange / Peer Tutoring Marketplace
 
-A web platform that connects students who can teach a skill with students who
-want to learn it. Users create a profile listing skills they can teach and
-skills they want to learn, browse and search other peers, send session
-requests, accept/decline/complete them, and rate completed sessions.
+A platform where students trade skills instead of paying for tutoring. You
+list what you can teach and what you want to learn, find someone with a
+matching skill, send them a session request, and rate the session once it's
+done.
 
 ## Tech stack
 
-- **Frontend:** plain HTML, CSS, JavaScript (no build step, no framework)
-- **Backend:** [Supabase](https://supabase.com) — Postgres database, Auth, and
-  Row Level Security, called directly from the browser via `@supabase/supabase-js`
-- **Hosting:** static hosting — currently deployed on [AWS Amplify
-  Hosting](#live-deployment); GitHub Pages works just as well since the
-  frontend talks to Supabase directly and there is no separate server to
-  deploy
+- Frontend: plain HTML/CSS/JS, no framework, no build step
+- Backend: Supabase (Postgres + Auth + Row Level Security), called straight
+  from the browser with `@supabase/supabase-js`
+- Hosting: AWS Amplify (link below), would work fine on GitHub Pages too
 
 ## Features
 
-- Email/password authentication (Supabase Auth)
-- Profile management — bio, skills you can teach, skills you want to learn
-- Marketplace browse page with search + skill filter
-- Session request flow: send → accept/decline → mark completed → rate
-- "Received" and "Sent" request tabs with live status badges
-- Direct peer-to-peer messaging with live delivery via Supabase Realtime —
-  message any student from Browse, Requests, or the Messages nav link
-- Admin dashboard: platform stats, user list with ratings, all requests, remove a user
-- Database-enforced rules (Row Level Security + triggers), not just UI checks:
-  - You can only edit your own profile
-  - Only the tutor can accept/decline/complete a request
-  - Only the requester can cancel a pending request or rate a completed one
-  - A user cannot grant themselves admin
+- Login/signup with Supabase Auth
+- Edit your profile: bio, skills you teach, skills you want to learn
+- Browse other students, search by name/skill/bio
+- Send a session request, accept/decline it, mark it completed, rate it
+- Received and Sent tabs on the Requests page with status badges
+- Direct messaging between any two students, updates live using Supabase
+  Realtime (no refresh needed)
+- Admin page: stats, user list, all requests, remove a user
+- The important rules are enforced in the database with Row Level Security,
+  not just hidden in the UI:
+  - you can only edit your own profile
+  - only the tutor can accept/decline/complete a request
+  - only the requester can cancel or rate one
+  - nobody can make themselves admin
 
 ## Live deployment
 
-The app is deployed and running on **AWS Amplify Hosting**:
+Deployed on AWS Amplify: https://main.d1lbffpnvsb54h.amplifyapp.com/
 
-**https://main.d1lbffpnvsb54h.amplifyapp.com/**
-
-This is a snapshot deploy built directly from this repo's `main` branch — it
-is **not** connected to GitHub for continuous deployment, so pushing new
-commits won't update it automatically. To publish a newer snapshot, deploy
-the latest `main` branch archive to the same Amplify app
-(`appId: d1lbffpnvsb54h`, region `us-east-1`) via `StartDeployment` with
-`sourceUrl` set to:
-
-```
-https://github.com/ShadowIzzHerZ/The-Peer-Tutoring-Marketplace/archive/refs/heads/main.zip
-```
-
-(GitHub's archive zip nests everything under
-`The-Peer-Tutoring-Marketplace-main/`, which is why the app's `customRules`
-transparently rewrite `/` and `/<*>` into that folder — no build step is
-involved, so this works with the static files as-is.)
-
-For an auto-updating deployment instead, connect the same Amplify app to this
-GitHub repo via **Amplify Console → App settings → Branch connections**,
-which trades the manual redeploy step above for automatic builds on every
-push.
+This isn't connected to GitHub, so it won't auto-update on new pushes. To
+push a new version, redeploy the `main` branch zip to the same Amplify app
+(`appId: d1lbffpnvsb54h`, `us-east-1`). Connecting the repo through the
+Amplify console would give proper auto-deploy on push, just wasn't set up
+for this project.
 
 ## Project structure
 
 ```
 peer-tutoring-marketplace/
 ├── index.html          Landing page
-├── register.html        Sign up
-├── login.html            Log in
-├── dashboard.html        Logged-in home / stats
-├── profile.html          Edit profile & password
-├── browse.html            Marketplace + request modal
-├── requests.html          Received / Sent tabs
-├── messages.html           Direct messaging (conversation list + live chat)
-├── admin.html                Admin dashboard
-├── css/style.css
+├── register.html       Sign up
+├── login.html           Log in
+├── dashboard.html       Logged-in home / stats
+├── profile.html         Edit profile & password
+├── browse.html           Marketplace + request modal
+├── requests.html         Received / Sent tabs
+├── messages.html          Direct messaging
+├── admin.html              Admin dashboard
+├── css/
 ├── js/
 │   ├── config.js        Supabase client (URL + anon key)
-│   ├── app.js            Shared utilities
+│   ├── app.js            Shared helpers
 │   ├── nav.js             Nav bar + auth guards
 │   ├── auth.js             Login/register logic
-│   ├── dashboard.js, profile.js, browse.js, requests.js, admin.js
-└── supabase/schema.sql  Full DB schema, RLS policies & triggers (reference)
+│   ├── messages.js          Messaging + Realtime
+│   └── dashboard.js, profile.js, browse.js, requests.js, admin.js
+└── supabase/schema.sql  DB schema, RLS policies & triggers
 ```
 
 ## Running locally
 
-No build step needed. Just open `index.html` in a browser, or serve the folder
-with any static server, e.g.:
+No build step. Just open `index.html` in a browser, or serve the folder:
 
 ```bash
 npx serve .
@@ -92,72 +73,55 @@ npx serve .
 
 ## Supabase setup
 
-The project already points at a live Supabase project (see `js/config.js`).
-The anon key in that file is a **public** key — it is safe to commit, because
-all access control is enforced by Row Level Security policies in the database
-(see `supabase/schema.sql`), not by hiding the key.
+Already pointed at our live Supabase project in `js/config.js`. The anon key
+in there is public and fine to commit, the real security is the RLS policies
+in `supabase/schema.sql`, not the key being secret.
 
-**Before demoing/submitting, disable email confirmation** so sign-ups can log
-in immediately: in the Supabase dashboard, go to
-**Authentication → Sign In / Providers → Email** and turn off **Confirm email**.
-Otherwise every new account needs to click a confirmation link first.
+Before demoing, turn off "Confirm email" in the Supabase dashboard
+(Authentication → Providers → Email), otherwise new signups can't log in
+until they click a confirmation link.
 
-### Making yourself an admin
+### Making yourself admin
 
-There's no public "become admin" button (by design). After you sign up through
-the app, run this once in the Supabase SQL editor:
+No button for this on purpose. After signing up, run this once in the SQL
+editor:
 
 ```sql
 update public.profiles set is_admin = true where email = 'you@example.com';
 ```
 
-### Recreating the schema elsewhere
+### Pointing this at a different Supabase project
 
-If you ever need to point this at a different Supabase project, run the SQL in
-`supabase/schema.sql` in the new project's SQL editor, then update
+Run `supabase/schema.sql` in the new project's SQL editor, then update
 `SUPABASE_URL` and `SUPABASE_ANON_KEY` in `js/config.js`.
 
-## Deployment (GitHub Pages alternative)
+## Deploying elsewhere (GitHub Pages)
 
-The live deployment above runs on AWS Amplify, but the app is just static
-files, so GitHub Pages works too:
+It's static files, so this works too:
 
-1. Push this repo to GitHub.
-2. In the repo, go to **Settings → Pages**, set **Source** to the `main`
-   branch (root), and save.
-3. The site will be live at `https://<username>.github.io/<repo-name>/`.
+1. Push the repo to GitHub
+2. Settings → Pages → set Source to the `main` branch
+3. Live at `https://<username>.github.io/<repo-name>/`
 
-No environment variables or build step are required since the Supabase
-anon key is already embedded in `js/config.js`.
+No env vars or build step needed, the Supabase key is already in `js/config.js`.
 
-## Verifying the security model
+## Security tests
 
-`supabase/rls_tests.sql` is an automated test suite that proves the Row Level
-Security policies and triggers in `schema.sql` actually behave as designed —
-it acts as several different (throwaway) users inside Postgres and checks
-that every permission boundary holds (e.g. a user can't update someone else's
-profile, can't grant themselves admin, can't accept their own session
-request, can't rate a session that isn't completed, can't read or send a
-direct message they're not part of, and can't edit a message's content when
-marking it read, and so on).
+`supabase/rls_tests.sql` runs a bunch of checks straight against the live DB
+to prove the RLS policies and triggers actually work: can't edit someone
+else's profile, can't self-promote to admin, can't accept your own request,
+can't rate a session that isn't completed, can't see or send a message
+you're not part of, and a few more like that.
 
-Run it in the Supabase SQL editor. It runs inside a transaction that always
-ends in `ROLLBACK`, so it's safe to re-run at any time — it never leaves test
-data behind. If every rule holds, it completes with no error; if one is
-broken, it stops immediately with a message naming exactly which check
-failed.
+It runs inside a transaction that ends in `ROLLBACK`, so it never leaves
+test data behind and is safe to re-run anytime. No error at the end means
+every check passed.
 
-## Notes for the viva
+## Notes
 
-- Auth, data storage, and access control all run through Supabase — there is
-  no custom backend server.
-- Data model: `profiles` (one row per user, linked to Supabase Auth) and
-  `requests` (one row per session request, with a `status` state machine:
-  `pending → accepted/declined → completed`, or `pending → cancelled`).
-  Ratings are attached directly to a completed request.
-- Row Level Security policies and two `before update` trigger functions
-  enforce who can do what at the database level — worth walking through
-  `supabase/schema.sql` to explain the security model.
-- Messaging (`messages` table) reuses the same pattern: RLS restricts every
-  row to its two participants, and Supabase Realtime pushes new rows to the
-  recipient's browser live, without polling.
+- No custom backend. Supabase handles auth, data, and permissions.
+- Two main tables: `profiles` and `requests`, plus `messages` for chat.
+- Requests go pending -> accepted/declined -> completed, or pending -> cancelled.
+- RLS policies plus a couple of trigger functions in `schema.sql` are what
+  actually stop people from doing things they shouldn't, worth pointing at
+  that file if anyone asks how the security works.
