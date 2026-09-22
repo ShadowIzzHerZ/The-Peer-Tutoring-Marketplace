@@ -101,10 +101,16 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="flex flex-wrap gap-1.5">${tagPills(u.skills_learn, 'learn')}</div>
         </div>
       </div>
-      <button type="button" class="request-btn w-full py-2 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-md text-label-md transition-all">${t('browse.requestSession')}</button>
+      <div class="flex gap-2">
+        <button type="button" class="message-btn flex-1 py-2 border border-outline text-on-surface hover:bg-surface-container-low rounded-lg font-label-md text-label-md transition-all">${t('browse.sendMessage')}</button>
+        <button type="button" class="request-btn flex-1 py-2 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-md text-label-md transition-all">${t('browse.requestSession')}</button>
+      </div>
     `;
 
     card.querySelector('.request-btn').addEventListener('click', () => openRequestModal(u));
+    card.querySelector('.message-btn').addEventListener('click', () => {
+      window.location.href = `messages.html?to=${u.id}`;
+    });
     return card;
   }
 

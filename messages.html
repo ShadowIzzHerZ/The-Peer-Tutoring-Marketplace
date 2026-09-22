@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <script src="js/theme-init.js"></script>
-<title>Admin Dashboard — Zen</title>
+<title>Messages — Zen</title>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -31,7 +31,7 @@
       <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a></li>
       <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="browse.html" data-i18n="nav.browse">Browse</a></li>
       <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="requests.html" data-i18n="nav.requests">Requests</a></li>
-      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary flex items-center gap-1" href="messages.html"><span data-i18n="nav.messages">Messages</span><span id="nav-messages-badge" class="hidden min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-on-primary text-[10px] font-bold flex items-center justify-center">0</span></a></li>
+      <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-primary font-bold flex items-center gap-1" href="messages.html"><span data-i18n="nav.messages">Messages</span><span id="nav-messages-badge" class="hidden min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-on-primary text-[10px] font-bold flex items-center justify-center">0</span></a></li>
       <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary" href="profile.html" data-i18n="nav.profile">Profile</a></li>
       <li class="nav-admin-only hidden"><a class="font-label-md text-label-md text-primary font-bold" href="admin.html" data-i18n="nav.admin">Admin</a></li>
       <li class="nav-auth-only hidden"><a class="font-label-md text-label-md text-on-surface hover:text-primary flex items-center gap-1" href="#" id="logout-btn"><span class="material-symbols-outlined text-[18px]">logout</span>Logout (<span id="nav-user-name"></span>)</a></li>
@@ -56,65 +56,39 @@
   </div>
 </header>
 
-<main class="flex-grow max-w-7xl mx-auto w-full px-space-lg md:px-margin py-space-xl">
-  <div class="mb-space-lg flex items-center gap-2">
-    <span class="material-symbols-outlined text-primary text-3xl">admin_panel_settings</span>
-    <div>
-      <h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight" data-i18n="admin.title">Admin Dashboard</h1>
-      <p class="font-body-md text-body-md text-on-surface-variant" data-i18n="admin.subtitle">Platform-wide overview of users and session requests.</p>
-    </div>
+<main class="flex-grow max-w-7xl mx-auto w-full px-space-lg md:px-margin py-space-xl flex flex-col min-h-0">
+  <div class="mb-space-lg">
+    <h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight" data-i18n="messages.title">Messages</h1>
+    <p class="font-body-md text-body-md text-on-surface-variant" data-i18n="messages.subtitle">Chat directly with your peers.</p>
   </div>
 
-  <div class="grid grid-cols-2 lg:grid-cols-4 gap-space-md mb-space-xl">
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg text-center">
-      <p class="font-headline-lg text-headline-lg font-bold text-primary" id="stat-total-users">0</p>
-      <p class="font-body-sm text-body-sm text-on-surface-variant" data-i18n="admin.totalUsers">Total Users</p>
-    </div>
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg text-center">
-      <p class="font-headline-lg text-headline-lg font-bold text-primary" id="stat-total-requests">0</p>
-      <p class="font-body-sm text-body-sm text-on-surface-variant" data-i18n="admin.totalRequests">Total Requests</p>
-    </div>
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg text-center">
-      <p class="font-headline-lg text-headline-lg font-bold text-status-completed" id="stat-completed">0</p>
-      <p class="font-body-sm text-body-sm text-on-surface-variant" data-i18n="admin.completedSessions">Completed Sessions</p>
-    </div>
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg text-center">
-      <p class="font-headline-lg text-headline-lg font-bold text-status-pending" id="stat-pending">0</p>
-      <p class="font-body-sm text-body-sm text-on-surface-variant" data-i18n="admin.pendingRequests">Pending Requests</p>
-    </div>
-  </div>
+  <div class="custom-warm-card bg-surface-container-lowest border border-outline-variant rounded-xl grid grid-cols-1 md:grid-cols-[300px_1fr] flex-1 min-h-[520px] max-h-[75vh] overflow-hidden">
+    <aside class="border-b md:border-b-0 md:border-r border-outline-variant flex flex-col min-h-0 max-h-[35vh] md:max-h-none">
+      <div class="p-space-md border-b border-outline-variant relative flex-shrink-0">
+        <div class="relative">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+          <input id="peer-search-input" type="text" autocomplete="off" placeholder="Search peers by name..." data-i18n-placeholder="messages.searchPlaceholder" class="w-full pl-9 pr-3 py-2 text-body-sm bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"/>
+        </div>
+        <div id="peer-search-results" class="hidden absolute left-space-md right-space-md mt-1 bg-surface-container-lowest border border-outline-variant rounded-lg shadow-lg z-10 max-h-56 overflow-y-auto"></div>
+      </div>
+      <div id="conversation-list" class="flex-1 overflow-y-auto p-space-sm space-y-1"></div>
+      <p id="conversations-empty" class="hidden text-center text-on-surface-variant font-body-sm p-space-lg" data-i18n="messages.noConversations">No conversations yet. Search for a peer above to start one.</p>
+    </aside>
 
-  <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg mb-space-lg overflow-x-auto">
-    <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-md" data-i18n="admin.users">Users</h3>
-    <table class="w-full text-left" id="users-table">
-      <thead>
-        <tr class="border-b border-outline-variant">
-          <th class="py-2 pr-4 font-label-sm text-label-sm text-on-surface-variant uppercase" data-i18n="admin.name">Name</th>
-          <th class="py-2 pr-4 font-label-sm text-label-sm text-on-surface-variant uppercase" data-i18n="admin.email">Email</th>
-          <th class="py-2 pr-4 font-label-sm text-label-sm text-on-surface-variant uppercase" data-i18n="admin.teach">Teach</th>
-          <th class="py-2 pr-4 font-label-sm text-label-sm text-on-surface-variant uppercase" data-i18n="admin.learn">Learn</th>
-          <th class="py-2 pr-4 font-label-sm text-label-sm text-on-surface-variant uppercase" data-i18n="admin.rating">Rating</th>
-          <th class="py-2 font-label-sm text-label-sm text-on-surface-variant uppercase"></th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-
-  <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg overflow-x-auto">
-    <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-md" data-i18n="admin.allRequests">All Requests</h3>
-    <table class="w-full text-left" id="requests-table">
-      <thead>
-        <tr class="border-b border-outline-variant">
-          <th class="py-2 pr-4 font-label-sm text-label-sm text-on-surface-variant uppercase" data-i18n="admin.from">From</th>
-          <th class="py-2 pr-4 font-label-sm text-label-sm text-on-surface-variant uppercase" data-i18n="admin.to">To</th>
-          <th class="py-2 pr-4 font-label-sm text-label-sm text-on-surface-variant uppercase" data-i18n="admin.skill">Skill</th>
-          <th class="py-2 pr-4 font-label-sm text-label-sm text-on-surface-variant uppercase" data-i18n="admin.proposed">Proposed</th>
-          <th class="py-2 font-label-sm text-label-sm text-on-surface-variant uppercase" data-i18n="admin.status">Status</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <section class="flex flex-col min-h-0">
+      <div id="chat-empty" class="flex-1 flex items-center justify-center p-space-lg text-center text-on-surface-variant font-body-md" data-i18n="messages.selectConversation">Select a conversation or search for a peer to start messaging.</div>
+      <div id="chat-panel" class="hidden flex-1 flex flex-col min-h-0">
+        <div class="flex items-center gap-space-sm p-space-md border-b border-outline-variant flex-shrink-0">
+          <div id="chat-peer-initials" class="w-9 h-9 rounded-full bg-tag-teach-bg border border-outline-variant flex items-center justify-center font-label-sm text-label-sm font-bold text-tag-teach-text flex-shrink-0">--</div>
+          <h2 id="chat-peer-name" class="font-headline-sm text-headline-sm text-on-surface">...</h2>
+        </div>
+        <div id="chat-messages" class="flex-1 overflow-y-auto p-space-md space-y-2"></div>
+        <form id="chat-form" class="flex items-center gap-2 p-space-md border-t border-outline-variant flex-shrink-0">
+          <input id="chat-input" type="text" autocomplete="off" placeholder="Type a message..." data-i18n-placeholder="messages.inputPlaceholder" class="flex-1 px-3 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"/>
+          <button type="submit" class="px-4 py-2.5 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-md text-label-md transition-all" data-i18n="messages.send">Send</button>
+        </form>
+      </div>
+    </section>
   </div>
 </main>
 
@@ -129,6 +103,6 @@
 <script src="js/app.js"></script>
 <script src="js/i18n.js"></script>
 <script src="js/nav.js"></script>
-<script src="js/admin.js"></script>
+<script src="js/messages.js"></script>
 </body>
 </html>

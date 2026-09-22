@@ -56,6 +56,31 @@ function initThemeToggle() {
   });
 }
 
+async function initMessagesBadge(profile) {
+  const badge = document.getElementById('nav-messages-badge');
+  if (!badge || !profile) return;
+
+  async function refreshCount() {
+    const { count } = await sb
+      .from('messages')
+      .select('id', { count: 'exact', head: true })
+      .eq('recipient_id', profile.id)
+      .is('read_at', null);
+    badge.textContent = count > 9 ? '9+' : String(count || 0);
+    badge.classList.toggle('hidden', !count);
+  }
+
+  await refreshCount();
+
+  sb.channel(`nav-messages-${profile.id}`)
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'messages', filter: `recipient_id=eq.${profile.id}` },
+      refreshCount
+    )
+    .subscribe();
+}
+
 async function initNav() {
   initThemeToggle();
 
@@ -81,6 +106,8 @@ async function initNav() {
 
   const userNameEl = document.getElementById('nav-user-name');
   if (userNameEl && profile) userNameEl.textContent = profile.name;
+
+  if (profile) initMessagesBadge(profile);
 
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {

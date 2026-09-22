@@ -102,6 +102,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     return card;
   }
 
+  function makeMessageButton(peerId) {
+    return makeActionButton(t('requests.message'), 'outline', () => {
+      window.location.href = `messages.html?to=${peerId}`;
+    });
+  }
+
   function buildReceivedCard(r) {
     return buildCard(r, r.from_profile ? r.from_profile.name : 'Unknown user', (actions) => {
       if (r.status === 'pending') {
@@ -112,6 +118,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           makeActionButton(t('requests.markCompleted'), 'primary', () => updateRequest(r.id, { status: 'completed' }))
         );
       }
+      actions.appendChild(makeMessageButton(r.from_user_id));
     });
   }
 
@@ -127,6 +134,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         p.textContent = `${t('requests.youRated')} ${r.rating}/5`;
         actions.appendChild(p);
       }
+      actions.appendChild(makeMessageButton(r.to_user_id));
     });
   }
 
