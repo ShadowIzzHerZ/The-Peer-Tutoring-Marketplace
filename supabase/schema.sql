@@ -173,3 +173,63 @@ $$;
 create trigger validate_request_update_trigger
   before update on public.requests
   for each row execute procedure public.validate_request_update();
+
+-- Peer-to-peer direct messaging between any two authenticated users.
+create table public.messages (
+  id uuid primary key default gen_random_uuid(),
+  sender_id uuid not null references public.profiles(id) on delete cascade,
+  recipient_id uuid not null references public.profiles(id) on delete cascade,
+  content text not null,
+  created_at timestamptz not null default now(),
+  read_at timestamptz,
+  constraint no_self_message check (sender_id <> recipient_id),
+  constraint message_not_blank check (length(btrim(content)) > 0)
+);
+
+create index messages_sender_idx on public.messages(sender_id);
+create index messages_recipient_idx on public.messages(recipient_id);
+create index messages_conversation_idx on public.messages(least(sender_id, recipient_id), greatest(sender_id, recipient_id), created_at);
+
+alter table public.messages enable row level security;
+
+-- Only the two participants in a conversation can see it.
+create policy "Participants can view their messages"
+  on public.messages for select
+  to authenticated
+  using (auth.uid() = sender_id or auth.uid() = recipient_id);
+
+create policy "Users can send messages as themselves"
+  on public.messages for insert
+  to authenticated
+  with check (auth.uid() = sender_id);
+
+-- A recipient can mark a message read; the trigger below stops them
+-- (or the sender) from touching anything else on the row.
+create policy "Recipients can mark messages read"
+  on public.messages for update
+  to authenticated
+  using (auth.uid() = recipient_id)
+  with check (auth.uid() = recipient_id);
+
+create function public.validate_message_update()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  if new.sender_id is distinct from old.sender_id
+     or new.recipient_id is distinct from old.recipient_id
+     or new.content is distinct from old.content
+     or new.created_at is distinct from old.created_at then
+    raise exception 'Only read_at can be updated on a message';
+  end if;
+  return new;
+end;
+$$;
+
+create trigger validate_message_update_trigger
+  before update on public.messages
+  for each row execute procedure public.validate_message_update();
+
+-- Realtime so both participants see new messages live without a refresh.
+alter publication supabase_realtime add table public.messages;

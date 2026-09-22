@@ -20,6 +20,8 @@ requests, accept/decline/complete them, and rate completed sessions.
 - Marketplace browse page with search + skill filter
 - Session request flow: send → accept/decline → mark completed → rate
 - "Received" and "Sent" request tabs with live status badges
+- Direct peer-to-peer messaging with live delivery via Supabase Realtime —
+  message any student from Browse, Requests, or the Messages nav link
 - Admin dashboard: platform stats, user list with ratings, all requests, remove a user
 - Database-enforced rules (Row Level Security + triggers), not just UI checks:
   - You can only edit your own profile
@@ -38,7 +40,8 @@ peer-tutoring-marketplace/
 ├── profile.html          Edit profile & password
 ├── browse.html            Marketplace + request modal
 ├── requests.html          Received / Sent tabs
-├── admin.html              Admin dashboard
+├── messages.html           Direct messaging (conversation list + live chat)
+├── admin.html                Admin dashboard
 ├── css/style.css
 ├── js/
 │   ├── config.js        Supabase client (URL + anon key)
@@ -121,3 +124,6 @@ failed.
 - Row Level Security policies and two `before update` trigger functions
   enforce who can do what at the database level — worth walking through
   `supabase/schema.sql` to explain the security model.
+- Messaging (`messages` table) reuses the same pattern: RLS restricts every
+  row to its two participants, and Supabase Realtime pushes new rows to the
+  recipient's browser live, without polling.

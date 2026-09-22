@@ -22,6 +22,8 @@ ratings.
   declined → completed** (or **pending → cancelled**)
 - Rate a completed session (1–5 stars), which feeds into that peer's public
   average rating shown on their profile card
+- **Message any other student directly**, with messages appearing live on
+  both ends — no page refresh needed (see [§9](#9-real-time-peer-messaging))
 - See platform-wide stats and manage users as an **admin**
 
 Every one of those rules (who can send a request, who can accept it, who can
@@ -150,7 +152,28 @@ Static text is tagged with `data-i18n="key"` attributes; dynamic content
 calls a shared `t(key)` lookup and re-renders on a language-change event. The
 choice persists in `localStorage`.
 
-## 9. Project structure
+## 9. Real-time peer messaging
+
+Beyond the one-time message attached to a session request, any student can
+open a direct conversation with any other student from **Messages** in the
+nav bar — or via the **Message** button on a browse card or a request row,
+which jumps straight into that conversation.
+
+- Conversations are computed on the fly from a single `messages` table
+  (`sender_id`, `recipient_id`, `content`, `read_at`) — there's no separate
+  "conversation" object to keep in sync.
+- **Supabase Realtime** is enabled on the table, and the client subscribes to
+  `postgres_changes` INSERT events filtered to the signed-in user. A new
+  message appears in the open thread — or as an unread badge on the
+  conversation list and the **Messages** nav link — the instant it's sent, on
+  both accounts, with no polling and no page refresh.
+- The same RLS model applies here as everywhere else: a `select` policy
+  limits every row to its two participants, an `insert` policy only lets you
+  send as yourself, and an `update` policy plus a trigger
+  (`validate_message_update`) together mean a recipient can flip `read_at`
+  to mark a message read but cannot alter who sent what to whom.
+
+## 10. Project structure
 
 ```
 peer-tutoring-marketplace/
@@ -161,7 +184,8 @@ peer-tutoring-marketplace/
 ├── profile.html              Edit profile & change password
 ├── browse.html                Marketplace grid, search/filter, request modal
 ├── requests.html               Received / Sent tabs, accept/decline/rate
-├── admin.html                   Platform stats, user table, all-requests table
+├── messages.html                 Direct messaging: conversation list + live chat
+├── admin.html                      Platform stats, user table, all-requests table
 ├── css/
 │   ├── theme.css              Light/dark CSS variable definitions + transitions
 │   └── extra.css               Small custom rules (icons, nav, toast, star widget)
@@ -172,6 +196,7 @@ peer-tutoring-marketplace/
 │   ├── i18n.js                    Translation dictionary + language switcher logic
 │   ├── theme-init.js               Pre-paint dark-mode class application (no flash)
 │   ├── tailwind-config.js           Design tokens, all pointing at CSS variables
+│   ├── messages.js                   Conversation list, chat thread, Realtime subscription
 │   └── login.js, register.js, dashboard.js, profile.js, browse.js, requests.js, admin.js
 │                                    Page-specific controllers
 ├── supabase/
@@ -181,7 +206,7 @@ peer-tutoring-marketplace/
 └── README.md                   Setup, local dev, and deployment instructions
 ```
 
-## 10. Running it locally
+## 11. Running it locally
 
 No build step, no dependencies to install:
 
@@ -192,11 +217,12 @@ npx serve .
 or just open `index.html` directly in a browser. The app talks to the live
 Supabase project already configured in `js/config.js`.
 
-## 11. What's intentionally out of scope
+## 12. What's intentionally out of scope
 
 To keep the implementation honest about what's real versus decorative:
 
-- No in-app messaging/chat beyond the request's one-time message field
+- No group chats or file/image attachments in messages — text only, one peer
+  at a time
 - No calendar/scheduling integration — a proposed date/time is just stored,
   not synced to any calendar
 - No email notifications (Supabase Auth's own confirmation email is the only
