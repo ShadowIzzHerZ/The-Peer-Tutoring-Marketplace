@@ -1,3 +1,45 @@
+// Turns a text input into a chip input: comma or Enter commits the typed skill as a removable block.
+function setupChips(input, box, initial) {
+  const items = [];
+  const render = () => {
+    box.innerHTML = '';
+    items.forEach((t, i) => {
+      const chip = document.createElement('span');
+      chip.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-outline-variant bg-surface-container text-label-md';
+      chip.textContent = t;
+      const x = document.createElement('button');
+      x.type = 'button';
+      x.textContent = '×';
+      x.addEventListener('click', () => { items.splice(i, 1); render(); });
+      chip.appendChild(x);
+      box.appendChild(chip);
+    });
+  };
+  const commit = (text) => {
+    const t = text.trim();
+    if (t && !items.some((s) => s.toLowerCase() === t.toLowerCase())) items.push(t);
+    render();
+  };
+  initial.forEach(commit);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === ',' || e.key === 'Enter') {
+      e.preventDefault();
+      commit(input.value);
+      input.value = '';
+    } else if (e.key === 'Backspace' && !input.value && items.length) {
+      items.pop();
+      render();
+    }
+  });
+  input.addEventListener('input', () => {
+    if (input.value.includes(',')) {
+      input.value.split(',').slice(0, -1).forEach(commit);
+      input.value = input.value.split(',').pop();
+    }
+  });
+  return { get: () => { commit(input.value); input.value = ''; return items.slice(); } };
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   const profile = await requireAuth();
   if (!profile) return;
@@ -6,8 +48,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   form.name.value = profile.name;
   form.email.value = profile.email;
   form.bio.value = profile.bio || '';
-  form.skillsTeach.value = (profile.skills_teach || []).join(', ');
-  form.skillsLearn.value = (profile.skills_learn || []).join(', ');
+  const teach = setupChips(form.skillsTeach, document.getElementById('skillsTeachChips'), profile.skills_teach || []);
+  const learn = setupChips(form.skillsLearn, document.getElementById('skillsLearnChips'), profile.skills_learn || []);
 
   const successEl = document.getElementById('profile-success');
 
@@ -20,8 +62,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       .update({
         name: form.name.value.trim(),
         bio: form.bio.value.trim(),
-        skills_teach: splitTags(form.skillsTeach.value),
-        skills_learn: splitTags(form.skillsLearn.value),
+        skills_teach: teach.get(),
+        skills_learn: learn.get(),
       })
       .eq('id', profile.id);
 
@@ -35,9 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     successEl.classList.remove('text-error');
     successEl.classList.add('text-status-active');
     successEl.textContent = 'Profile updated.';
-    setTimeout(() => {
-      successEl.textContent = '';
-    }, 2500);
+    window.location.href = 'dashboard.html';
   });
 
   const passwordForm = document.getElementById('password-form');
