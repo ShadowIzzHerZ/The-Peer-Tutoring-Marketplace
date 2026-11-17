@@ -8,4 +8,6 @@ const SUPABASE_URL = 'https://fniaqhxejomoaiksxktg.supabase.co';
 const SUPABASE_ANON_KEY =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuaWFxaHhlam9tb2Fpa3N4a3RnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4OTA1NTgsImV4cCI6MjEwNTQ2NjU1OH0.uLVqcvpjaRUUyuuXC3GWS3tyJIDMvknOap8be5EFKTY';
 
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true, storage: window.localStorage },
+});
