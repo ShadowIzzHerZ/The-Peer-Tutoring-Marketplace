@@ -1,52 +1,10 @@
-// Turns a text input into a chip input: comma or Enter commits the typed skill as a removable block.
-function setupChips(input, box, initial) {
-  const items = [];
-  const render = () => {
-    box.innerHTML = '';
-    items.forEach((t, i) => {
-      const chip = document.createElement('span');
-      chip.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-outline-variant bg-surface-container text-label-md';
-      chip.textContent = t;
-      const x = document.createElement('button');
-      x.type = 'button';
-      x.textContent = '×';
-      x.addEventListener('click', () => { items.splice(i, 1); render(); });
-      chip.appendChild(x);
-      box.appendChild(chip);
-    });
-  };
-  const commit = (text) => {
-    const t = text.trim();
-    if (t && !items.some((s) => s.toLowerCase() === t.toLowerCase())) items.push(t);
-    render();
-  };
-  initial.forEach(commit);
-  input.addEventListener('keydown', (e) => {
-    if (e.key === ',' || e.key === 'Enter') {
-      e.preventDefault();
-      commit(input.value);
-      input.value = '';
-    } else if (e.key === 'Backspace' && !input.value && items.length) {
-      items.pop();
-      render();
-    }
-  });
-  input.addEventListener('input', () => {
-    if (input.value.includes(',')) {
-      input.value.split(',').slice(0, -1).forEach(commit);
-      input.value = input.value.split(',').pop();
-    }
-  });
-  return { get: () => { commit(input.value); input.value = ''; return items.slice(); } };
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
   const profile = await requireAuth();
   if (!profile) return;
 
   const form = document.getElementById('profile-form');
   form.name.value = profile.name;
-  form.email.value = profile.email;
+  form.email.value = (await sb.auth.getSession()).data.session.user.email;
   form.bio.value = profile.bio || '';
   const teach = setupChips(form.skillsTeach, document.getElementById('skillsTeachChips'), profile.skills_teach || []);
   const learn = setupChips(form.skillsLearn, document.getElementById('skillsLearnChips'), profile.skills_learn || []);

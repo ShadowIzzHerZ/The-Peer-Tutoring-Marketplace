@@ -23,13 +23,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     const { data: users, error } = await sb.from('profiles').select('*').eq('is_admin', false);
     if (error || !users) return;
 
+    const [ratings, { data: emailRows }] = await Promise.all([getAverageRatings(), sb.rpc('admin_list_emails')]);
+    const emails = Object.fromEntries((emailRows || []).map((e) => [e.id, e.email]));
+
     for (const u of users) {
-      const rating = await getAverageRating(u.id);
+      const rating = ratings[u.id];
       const tr = document.createElement('tr');
       tr.className = 'border-b border-outline-variant last:border-0';
       tr.innerHTML = `
         <td class="py-2.5 pr-4 font-body-sm text-body-sm text-on-surface">${escapeHtml(u.name)}</td>
-        <td class="py-2.5 pr-4 font-body-sm text-body-sm text-on-surface-variant">${escapeHtml(u.email)}</td>
+        <td class="py-2.5 pr-4 font-body-sm text-body-sm text-on-surface-variant">${escapeHtml(emails[u.id] || '—')}</td>
         <td class="py-2.5 pr-4 font-body-sm text-body-sm text-on-surface">${(u.skills_teach || []).length}</td>
         <td class="py-2.5 pr-4 font-body-sm text-body-sm text-on-surface">${(u.skills_learn || []).length}</td>
         <td class="py-2.5 pr-4 font-body-sm text-body-sm text-on-surface">${rating ? rating.toFixed(1) : '—'}</td>
@@ -70,7 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function removeUser(id) {
     if (!confirm(t('admin.removeConfirm'))) return;
 
-    const { error } = await sb.from('profiles').delete().eq('id', id);
+    const { error } = await sb.rpc('admin_delete_user', { uid: id });
     if (error) {
       showToast(error.message);
       return;

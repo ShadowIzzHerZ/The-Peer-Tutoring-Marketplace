@@ -1,56 +1,3 @@
-function makeSkillPill(text, variant, onRemove) {
-  const bg = variant === 'teach' ? 'bg-tag-teach-bg text-tag-teach-text border-tag-teach-border' : 'bg-tag-learn-bg text-tag-learn-text border-tag-learn-border';
-  const pill = document.createElement('span');
-  pill.className = `inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-label-md font-label-md ${bg}`;
-  pill.dataset.value = text;
-
-  const label = document.createElement('span');
-  label.textContent = text;
-  pill.appendChild(label);
-
-  const removeBtn = document.createElement('button');
-  removeBtn.type = 'button';
-  removeBtn.className = 'hover:opacity-70 transition-opacity';
-  removeBtn.innerHTML = '<span class="material-symbols-outlined text-[14px]">close</span>';
-  removeBtn.addEventListener('click', () => {
-    pill.remove();
-    onRemove();
-  });
-  pill.appendChild(removeBtn);
-
-  return pill;
-}
-
-function setupSkillInput(inputId, btnId, listId, variant) {
-  const input = document.getElementById(inputId);
-  const btn = document.getElementById(btnId);
-  const list = document.getElementById(listId);
-
-  function addSkill() {
-    const text = input.value.trim();
-    if (!text) return;
-    const existing = Array.from(list.children).map((el) => el.dataset.value.toLowerCase());
-    if (existing.includes(text.toLowerCase())) {
-      input.value = '';
-      return;
-    }
-    list.appendChild(makeSkillPill(text, variant, () => {}));
-    input.value = '';
-  }
-
-  btn.addEventListener('click', addSkill);
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      addSkill();
-    }
-  });
-}
-
-function getSkillValues(listId) {
-  return Array.from(document.getElementById(listId).children).map((el) => el.dataset.value);
-}
-
 function showRegisterError(message) {
   const banner = document.getElementById('register-error-banner');
   const text = document.getElementById('register-error-text');
@@ -69,8 +16,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  setupSkillInput('addTeachInput', 'addTeachBtn', 'teachSkillsList', 'teach');
-  setupSkillInput('addLearnInput', 'addLearnBtn', 'learnSkillsList', 'learn');
+  const teach = setupChips(document.getElementById('addTeachInput'), document.getElementById('teachSkillsList'), []);
+  const learn = setupChips(document.getElementById('addLearnInput'), document.getElementById('learnSkillsList'), []);
+  document.getElementById('addTeachBtn').addEventListener('click', teach.get);
+  document.getElementById('addLearnBtn').addEventListener('click', learn.get);
 
   const form = document.getElementById('register-form');
   const submitBtn = form.querySelector('button[type="submit"]');
@@ -84,8 +33,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
     const bio = document.getElementById('bio').value.trim();
-    const skillsTeach = getSkillValues('teachSkillsList');
-    const skillsLearn = getSkillValues('learnSkillsList');
+    const skillsTeach = teach.get();
+    const skillsLearn = learn.get();
 
     if (!name || !email || !password) {
       showRegisterError('Name, email and password are required.');

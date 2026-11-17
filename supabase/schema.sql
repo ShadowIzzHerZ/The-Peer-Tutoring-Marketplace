@@ -5,7 +5,6 @@
 create table public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   name text not null,
-  email text not null,
   bio text not null default '',
   skills_teach text[] not null default '{}',
   skills_learn text[] not null default '{}',
@@ -89,11 +88,10 @@ language plpgsql
 security definer set search_path = public
 as $$
 begin
-  insert into public.profiles (id, name, email, bio, skills_teach, skills_learn)
+  insert into public.profiles (id, name, bio, skills_teach, skills_learn)
   values (
     new.id,
     coalesce(new.raw_user_meta_data->>'name', split_part(new.email, '@', 1)),
-    new.email,
     coalesce(new.raw_user_meta_data->>'bio', ''),
     coalesce(
       (select array_agg(value) from jsonb_array_elements_text(coalesce(new.raw_user_meta_data->'skills_teach', '[]'::jsonb)) as value),
@@ -139,6 +137,15 @@ language plpgsql
 security definer set search_path = public
 as $$
 begin
+  if new.from_user_id is distinct from old.from_user_id
+     or new.to_user_id is distinct from old.to_user_id
+     or new.skill is distinct from old.skill
+     or new.message is distinct from old.message
+     or new.proposed_date is distinct from old.proposed_date
+     or new.proposed_time is distinct from old.proposed_time then
+    raise exception 'Request details cannot be changed';
+  end if;
+
   if new.status is distinct from old.status then
     if new.status in ('accepted', 'declined') and old.status = 'pending' then
       if auth.uid() <> old.to_user_id then
@@ -157,7 +164,7 @@ begin
     end if;
   end if;
 
-  if new.rating is distinct from old.rating then
+  if new.rating is distinct from old.rating or new.rating_comment is distinct from old.rating_comment then
     if auth.uid() <> old.from_user_id then
       raise exception 'Only the requester can rate a session';
     end if;
@@ -244,3 +251,26 @@ end $$;
 
 create trigger auto_confirm_email_trigger before insert on auth.users
   for each row execute procedure public.auto_confirm_email();
+
+-- Emails live only in auth.users; admins read them through this function.
+create function public.admin_list_emails()
+returns table (id uuid, email text) language sql security definer set search_path = public as $$
+  select u.id, u.email::text from auth.users u
+  where exists (select 1 from public.profiles p where p.id = auth.uid() and p.is_admin);
+$$;
+
+-- Fully removes a user (login + profile via cascade), admins only.
+create function public.admin_delete_user(uid uuid)
+returns void language plpgsql security definer set search_path = public as $$
+begin
+  if not exists (select 1 from public.profiles where id = auth.uid() and is_admin) then
+    raise exception 'Admins only';
+  end if;
+  if uid = auth.uid() then
+    raise exception 'You cannot remove yourself';
+  end if;
+  delete from auth.users where id = uid;
+end; $$;
+
+revoke execute on function public.admin_list_emails(), public.admin_delete_user(uuid) from public, anon;
+grant execute on function public.admin_list_emails(), public.admin_delete_user(uuid) to authenticated;

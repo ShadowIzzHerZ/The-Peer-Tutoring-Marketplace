@@ -1,7 +1,3 @@
-function splitTags(value) {
-  return value.split(',').map((s) => s.trim()).filter(Boolean);
-}
-
 function escapeHtml(str) {
   const div = document.createElement('div');
   div.textContent = str == null ? '' : String(str);
@@ -76,3 +72,62 @@ async function getAverageRating(userId) {
   const sum = data.reduce((acc, r) => acc + r.rating, 0);
   return sum / data.length;
 }
+
+// One query for every user's average rating: { userId: average }.
+async function getAverageRatings() {
+  const { data } = await sb
+    .from('requests')
+    .select('to_user_id, rating')
+    .eq('status', 'completed')
+    .not('rating', 'is', null);
+  const sums = {};
+  (data || []).forEach((r) => {
+    const s = (sums[r.to_user_id] = sums[r.to_user_id] || { n: 0, total: 0 });
+    s.n += 1;
+    s.total += r.rating;
+  });
+  return Object.fromEntries(Object.entries(sums).map(([id, s]) => [id, s.total / s.n]));
+}
+
+// Turns a text input into a chip input: comma or Enter commits the typed skill as a removable block.
+function setupChips(input, box, initial) {
+  const items = [];
+  const render = () => {
+    box.innerHTML = '';
+    items.forEach((t, i) => {
+      const chip = document.createElement('span');
+      chip.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-outline-variant bg-surface-container text-label-md';
+      chip.textContent = t;
+      const x = document.createElement('button');
+      x.type = 'button';
+      x.textContent = '×';
+      x.addEventListener('click', () => { items.splice(i, 1); render(); });
+      chip.appendChild(x);
+      box.appendChild(chip);
+    });
+  };
+  const commit = (text) => {
+    const t = text.trim();
+    if (t && !items.some((s) => s.toLowerCase() === t.toLowerCase())) items.push(t);
+    render();
+  };
+  initial.forEach(commit);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === ',' || e.key === 'Enter') {
+      e.preventDefault();
+      commit(input.value);
+      input.value = '';
+    } else if (e.key === 'Backspace' && !input.value && items.length) {
+      items.pop();
+      render();
+    }
+  });
+  input.addEventListener('input', () => {
+    if (input.value.includes(',')) {
+      input.value.split(',').slice(0, -1).forEach(commit);
+      input.value = input.value.split(',').pop();
+    }
+  });
+  return { get: () => { commit(input.value); input.value = ''; return items.slice(); } };
+}
+

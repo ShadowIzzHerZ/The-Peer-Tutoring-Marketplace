@@ -102,6 +102,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function loadThread(peerId) {
+    if (!/^[0-9a-f-]{36}$/i.test(peerId)) return;
     const { data, error } = await sb
       .from('messages')
       .select('*')

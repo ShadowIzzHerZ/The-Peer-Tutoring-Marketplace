@@ -18,12 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  const ratingCache = {};
-  await Promise.all(
-    profiles.map(async (u) => {
-      ratingCache[u.id] = await getAverageRating(u.id);
-    })
-  );
+  const ratingCache = await getAverageRatings();
 
   const allSkills = Array.from(new Set(profiles.flatMap((u) => u.skills_teach || []))).sort();
   allSkills.forEach((skill) => {

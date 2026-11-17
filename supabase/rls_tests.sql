@@ -403,8 +403,23 @@ begin
   end;
 end $$;
 
+select pg_temp.act_as('b');
+do $$
+declare blocked boolean := false;
+begin
+  begin
+    update public.requests set skill = 'something else' where id = (select id from t_reqs where label = 'main');
+  exception when raise_exception then
+    blocked := sqlerrm like 'Request details cannot be changed%';
+  end;
+  if not blocked then
+    raise exception 'TEST FAILED: request details (skill) should NOT be editable after creation';
+  end if;
+  raise notice 'PASS: request details cannot be edited after creation';
+end $$;
+
 -- ============================================================================
--- All 27 checks above ran without an unhandled error, so every rule held.
+-- All 28 checks above ran without an unhandled error, so every rule held.
 -- Roll back: none of this fixture data is meant to persist.
 -- ============================================================================
 rollback;
