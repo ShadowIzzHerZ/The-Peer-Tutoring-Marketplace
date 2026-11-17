@@ -173,3 +173,14 @@ $$;
 create trigger validate_request_update_trigger
   before update on public.requests
   for each row execute procedure public.validate_request_update();
+
+-- Auto-confirm emails so new users can enter the app right after registering.
+create function public.auto_confirm_email()
+returns trigger language plpgsql security definer set search_path = public as $$
+begin
+  new.email_confirmed_at := coalesce(new.email_confirmed_at, now());
+  return new;
+end $$;
+
+create trigger auto_confirm_email_trigger before insert on auth.users
+  for each row execute procedure public.auto_confirm_email();

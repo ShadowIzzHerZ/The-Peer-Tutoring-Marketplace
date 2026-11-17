@@ -111,6 +111,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       },
     });
 
+    let session = data && data.session;
+    // DB trigger auto-confirms emails, so signing in right away works even when Confirm email is on.
+    if (!error && !session) {
+      const res = await sb.auth.signInWithPassword({ email, password });
+      session = res.data && res.data.session;
+    }
+
     submitBtn.disabled = false;
     submitBtn.classList.remove('opacity-60');
 
@@ -119,7 +126,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    if (!data.session) {
+    if (!session) {
       document.getElementById('displayEmail').textContent = email;
       document.getElementById('registrationState').classList.add('hidden');
       document.getElementById('confirmState').classList.remove('hidden');
