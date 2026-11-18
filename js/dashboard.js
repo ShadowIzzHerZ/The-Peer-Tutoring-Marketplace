@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('stat-sent').textContent = (sent || []).length;
     document.getElementById('stat-completed').textContent = completed.length;
 
-    const avgRating = await getAverageRating(profile.id);
+    const avgRating = (await getAverageRatings())[profile.id];
     document.getElementById('stat-rating').textContent = avgRating ? avgRating.toFixed(1) : '—';
 
     const listEl = document.getElementById('recent-received-list');

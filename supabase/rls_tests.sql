@@ -85,7 +85,7 @@ do $$
 begin
   update public.profiles set bio = 'Updated by A' where id = (select id from t_ids where label = 'a');
   if not found then
-    raise exception 'TEST FAILED: user A should be able to update their own profile';
+    raise exception 'TEST FAILED: user A should be able to update their own profile' using errcode = 'XX001';
   end if;
   raise notice 'PASS: user A can update their own profile';
 end $$;
@@ -105,7 +105,7 @@ do $$
 begin
   update public.profiles set is_admin = true where id = (select id from t_ids where label = 'a');
   if (select is_admin from public.profiles where id = (select id from t_ids where label = 'a')) then
-    raise exception 'TEST FAILED: user A should NOT be able to self-promote to admin';
+    raise exception 'TEST FAILED: user A should NOT be able to self-promote to admin' using errcode = 'XX001';
   end if;
   raise notice 'PASS: user A cannot self-promote to admin, even on their own row';
 end $$;
@@ -115,7 +115,7 @@ do $$
 begin
   update public.profiles set bio = 'Updated by admin' where id = (select id from t_ids where label = 'b');
   if not found then
-    raise exception 'TEST FAILED: admin should be able to update any profile';
+    raise exception 'TEST FAILED: admin should be able to update any profile' using errcode = 'XX001';
   end if;
   raise notice 'PASS: admin can update any profile';
 end $$;
@@ -125,7 +125,7 @@ do $$
 begin
   delete from public.profiles where id = (select id from t_ids where label = 'a');
   if found then
-    raise exception 'TEST FAILED: a non-admin should NOT be able to delete another profile';
+    raise exception 'TEST FAILED: a non-admin should NOT be able to delete another profile' using errcode = 'XX001';
   end if;
   raise notice 'PASS: non-admin cannot delete another profile';
 end $$;
@@ -135,7 +135,7 @@ do $$
 begin
   delete from public.profiles where id = (select id from t_ids where label = 'c');
   if not found then
-    raise exception 'TEST FAILED: admin should be able to delete a profile';
+    raise exception 'TEST FAILED: admin should be able to delete a profile' using errcode = 'XX001';
   end if;
   raise notice 'PASS: admin can delete a profile';
 end $$;
@@ -163,7 +163,7 @@ begin
   begin
     insert into public.requests (from_user_id, to_user_id, skill)
     values ((select id from t_ids where label = 'b'), (select id from t_ids where label = 'a'), 'Impersonation');
-    raise exception 'TEST FAILED: user A should NOT be able to create a request impersonating user B as sender';
+    raise exception 'TEST FAILED: user A should NOT be able to create a request impersonating user B as sender' using errcode = 'XX001';
   exception
     when insufficient_privilege then
       raise notice 'PASS: cannot impersonate another user as the request sender';
@@ -176,7 +176,7 @@ begin
   begin
     insert into public.requests (from_user_id, to_user_id, skill)
     values ((select id from t_ids where label = 'a'), (select id from t_ids where label = 'a'), 'Self');
-    raise exception 'TEST FAILED: a self-request should be rejected by the no_self_request constraint';
+    raise exception 'TEST FAILED: a self-request should be rejected by the no_self_request constraint' using errcode = 'XX001';
   exception
     when check_violation then
       raise notice 'PASS: self-requests are rejected';
@@ -190,7 +190,7 @@ declare
 begin
   select count(*) into cnt from public.requests where id = (select id from t_reqs where label = 'main');
   if cnt <> 0 then
-    raise exception 'TEST FAILED: an uninvolved user should not be able to see the request';
+    raise exception 'TEST FAILED: an uninvolved user should not be able to see the request' using errcode = 'XX001';
   end if;
   raise notice 'PASS: uninvolved users cannot see the request';
 end $$;
@@ -202,7 +202,7 @@ declare
 begin
   select count(*) into cnt from public.requests where id = (select id from t_reqs where label = 'main');
   if cnt <> 1 then
-    raise exception 'TEST FAILED: the recipient should be able to see the request';
+    raise exception 'TEST FAILED: the recipient should be able to see the request' using errcode = 'XX001';
   end if;
   raise notice 'PASS: the recipient can see the request';
 end $$;
@@ -212,7 +212,7 @@ do $$
 begin
   begin
     update public.requests set status = 'accepted' where id = (select id from t_reqs where label = 'main');
-    raise exception 'TEST FAILED: the requester should NOT be able to accept their own request';
+    raise exception 'TEST FAILED: the requester should NOT be able to accept their own request' using errcode = 'XX001';
   exception
     when raise_exception then
       raise notice 'PASS: the requester cannot accept their own request';
@@ -224,7 +224,7 @@ do $$
 begin
   update public.requests set status = 'accepted' where id = (select id from t_reqs where label = 'main');
   if not found then
-    raise exception 'TEST FAILED: the recipient should be able to accept the request';
+    raise exception 'TEST FAILED: the recipient should be able to accept the request' using errcode = 'XX001';
   end if;
   raise notice 'PASS: the recipient can accept the request';
 end $$;
@@ -234,7 +234,7 @@ do $$
 begin
   begin
     update public.requests set status = 'completed' where id = (select id from t_reqs where label = 'main');
-    raise exception 'TEST FAILED: the requester should NOT be able to mark the session completed';
+    raise exception 'TEST FAILED: the requester should NOT be able to mark the session completed' using errcode = 'XX001';
   exception
     when raise_exception then
       raise notice 'PASS: the requester cannot mark the session completed';
@@ -246,7 +246,7 @@ do $$
 begin
   update public.requests set status = 'completed' where id = (select id from t_reqs where label = 'main');
   if not found then
-    raise exception 'TEST FAILED: the recipient should be able to mark the session completed';
+    raise exception 'TEST FAILED: the recipient should be able to mark the session completed' using errcode = 'XX001';
   end if;
   raise notice 'PASS: the recipient can mark the session completed';
 end $$;
@@ -256,7 +256,7 @@ do $$
 begin
   begin
     update public.requests set rating = 5 where id = (select id from t_reqs where label = 'main');
-    raise exception 'TEST FAILED: the recipient should NOT be able to rate the session';
+    raise exception 'TEST FAILED: the recipient should NOT be able to rate the session' using errcode = 'XX001';
   exception
     when raise_exception then
       raise notice 'PASS: the recipient cannot rate the session';
@@ -268,7 +268,7 @@ do $$
 begin
   update public.requests set rating = 5 where id = (select id from t_reqs where label = 'main');
   if not found then
-    raise exception 'TEST FAILED: the requester should be able to rate the completed session';
+    raise exception 'TEST FAILED: the requester should be able to rate the completed session' using errcode = 'XX001';
   end if;
   raise notice 'PASS: the requester can rate the completed session';
 end $$;
@@ -285,7 +285,7 @@ begin
 
   begin
     update public.requests set rating = 4 where id = new_id;
-    raise exception 'TEST FAILED: should not be able to rate a pending session';
+    raise exception 'TEST FAILED: should not be able to rate a pending session' using errcode = 'XX001';
   exception
     when raise_exception then
       raise notice 'PASS: cannot rate a session that is not completed';
@@ -297,7 +297,7 @@ do $$
 begin
   begin
     update public.requests set status = 'completed' where id = (select id from t_reqs where label = 'second');
-    raise exception 'TEST FAILED: pending -> completed should be an invalid transition';
+    raise exception 'TEST FAILED: pending -> completed should be an invalid transition' using errcode = 'XX001';
   exception
     when raise_exception then
       raise notice 'PASS: invalid status transitions (skipping "accepted") are rejected';
@@ -327,7 +327,7 @@ begin
   begin
     insert into public.messages (sender_id, recipient_id, content)
     values ((select id from t_ids where label = 'b'), (select id from t_ids where label = 'a'), 'Impersonation');
-    raise exception 'TEST FAILED: user A should NOT be able to send a message impersonating user B as sender';
+    raise exception 'TEST FAILED: user A should NOT be able to send a message impersonating user B as sender' using errcode = 'XX001';
   exception
     when insufficient_privilege then
       raise notice 'PASS: cannot impersonate another user as the message sender';
@@ -340,7 +340,7 @@ begin
   begin
     insert into public.messages (sender_id, recipient_id, content)
     values ((select id from t_ids where label = 'a'), (select id from t_ids where label = 'a'), 'Talking to myself');
-    raise exception 'TEST FAILED: a self-message should be rejected by the no_self_message constraint';
+    raise exception 'TEST FAILED: a self-message should be rejected by the no_self_message constraint' using errcode = 'XX001';
   exception
     when check_violation then
       raise notice 'PASS: self-messages are rejected';
@@ -354,7 +354,7 @@ declare
 begin
   select count(*) into cnt from public.messages where id = (select id from t_msgs where label = 'main');
   if cnt <> 0 then
-    raise exception 'TEST FAILED: an uninvolved user should not be able to see the message';
+    raise exception 'TEST FAILED: an uninvolved user should not be able to see the message' using errcode = 'XX001';
   end if;
   raise notice 'PASS: uninvolved users cannot see the message';
 end $$;
@@ -366,7 +366,7 @@ declare
 begin
   select count(*) into cnt from public.messages where id = (select id from t_msgs where label = 'main');
   if cnt <> 1 then
-    raise exception 'TEST FAILED: the recipient should be able to see the message';
+    raise exception 'TEST FAILED: the recipient should be able to see the message' using errcode = 'XX001';
   end if;
   raise notice 'PASS: the recipient can see the message';
 end $$;
@@ -376,7 +376,7 @@ do $$
 begin
   update public.messages set read_at = now() where id = (select id from t_msgs where label = 'main');
   if found then
-    raise exception 'TEST FAILED: the sender should NOT be able to mark their own message as read';
+    raise exception 'TEST FAILED: the sender should NOT be able to mark their own message as read' using errcode = 'XX001';
   end if;
   raise notice 'PASS: the sender cannot mark their own message as read (only the recipient can)';
 end $$;
@@ -386,7 +386,7 @@ do $$
 begin
   update public.messages set read_at = now() where id = (select id from t_msgs where label = 'main');
   if not found then
-    raise exception 'TEST FAILED: the recipient should be able to mark the message as read';
+    raise exception 'TEST FAILED: the recipient should be able to mark the message as read' using errcode = 'XX001';
   end if;
   raise notice 'PASS: the recipient can mark the message as read';
 end $$;
@@ -396,7 +396,7 @@ do $$
 begin
   begin
     update public.messages set content = 'edited by recipient' where id = (select id from t_msgs where label = 'main');
-    raise exception 'TEST FAILED: the recipient should NOT be able to change the message content';
+    raise exception 'TEST FAILED: the recipient should NOT be able to change the message content' using errcode = 'XX001';
   exception
     when raise_exception then
       raise notice 'PASS: only read_at can be changed — content is protected even from the recipient';
@@ -413,13 +413,43 @@ begin
     blocked := sqlerrm like 'Request details cannot be changed%';
   end;
   if not blocked then
-    raise exception 'TEST FAILED: request details (skill) should NOT be editable after creation';
+    raise exception 'TEST FAILED: request details (skill) should NOT be editable after creation' using errcode = 'XX001';
   end if;
   raise notice 'PASS: request details cannot be edited after creation';
 end $$;
 
+select pg_temp.act_as('a');
+do $$
+declare blocked boolean := false;
+begin
+  begin
+    update public.requests set rating = 1 where id = (select id from t_reqs where label = 'main');
+  exception when raise_exception then
+    blocked := sqlerrm = 'Already rated';
+  end;
+  if not blocked then
+    raise exception 'TEST FAILED: a session should NOT be re-ratable' using errcode = 'XX001';
+  end if;
+  raise notice 'PASS: a rating cannot be changed once given';
+end $$;
+
+do $$
+declare blocked boolean := false;
+begin
+  begin
+    insert into public.requests (from_user_id, to_user_id, skill, status, rating)
+    values ((select id from t_ids where label = 'a'), (select id from t_ids where label = 'b'), 'x', 'completed', 5);
+  exception when insufficient_privilege then
+    blocked := true;
+  end;
+  if not blocked then
+    raise exception 'TEST FAILED: a request cannot be created already completed and rated' using errcode = 'XX001';
+  end if;
+  raise notice 'PASS: fake completed/rated requests are rejected on insert';
+end $$;
+
 -- ============================================================================
--- All 28 checks above ran without an unhandled error, so every rule held.
+-- All 30 checks above ran without an unhandled error, so every rule held.
 -- Roll back: none of this fixture data is meant to persist.
 -- ============================================================================
 rollback;

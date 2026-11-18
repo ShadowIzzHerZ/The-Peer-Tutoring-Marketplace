@@ -66,7 +66,7 @@
     <form id="profile-form" class="space-y-space-md">
       <div>
         <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="name" data-i18n="profile.fullName">Full name</label>
-        <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-space-md py-2.5 text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all" id="name" name="name" type="text" required/>
+        <input maxlength="100" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-space-md py-2.5 text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all" id="name" name="name" type="text" required/>
       </div>
       <div>
         <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="email" data-i18n="profile.email">Email</label>
@@ -74,7 +74,7 @@
       </div>
       <div>
         <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="bio" data-i18n="profile.bio">Short bio</label>
-        <textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-space-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all" id="bio" name="bio" rows="3"></textarea>
+        <textarea maxlength="1000" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-space-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all" id="bio" name="bio" rows="3"></textarea>
       </div>
       <div>
         <label class="block font-label-md text-label-md text-on-surface mb-1.5" for="skillsTeach" data-i18n="profile.skillsTeach">Skills you can teach</label>

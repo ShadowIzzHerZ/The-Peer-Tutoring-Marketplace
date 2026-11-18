@@ -71,7 +71,7 @@ create policy "Participants and admins can view requests"
 create policy "Users can create their own requests"
   on public.requests for insert
   to authenticated
-  with check (auth.uid() = from_user_id);
+  with check (auth.uid() = from_user_id and status = 'pending' and rating is null);
 
 create policy "Participants can update their requests"
   on public.requests for update
@@ -170,6 +170,9 @@ begin
     end if;
     if old.status <> 'completed' then
       raise exception 'Can only rate completed sessions';
+    end if;
+    if old.rating is not null then
+      raise exception 'Already rated';
     end if;
   end if;
 
@@ -274,3 +277,30 @@ end; $$;
 
 revoke execute on function public.admin_list_emails(), public.admin_delete_user(uuid) from public, anon;
 grant execute on function public.admin_list_emails(), public.admin_delete_user(uuid) to authenticated;
+
+-- Average rating per tutor. Requests are private to their two participants,
+-- so this exposes only the aggregate, never the rows.
+create function public.tutor_ratings()
+returns table (to_user_id uuid, avg_rating numeric, rating_count bigint)
+language sql security definer set search_path = public as $$
+  select to_user_id, avg(rating)::numeric, count(*) from public.requests
+  where status = 'completed' and rating is not null group by to_user_id;
+$$;
+revoke execute on function public.tutor_ratings() from public, anon;
+grant execute on function public.tutor_ratings() to authenticated;
+
+-- Size limits so one user cannot bloat every page load.
+-- Skills: at most 30 items, each at most 100 characters.
+create function public.skills_ok(a text[]) returns boolean language sql immutable as $$
+  select coalesce(cardinality(a),0) <= 30 and coalesce((select max(length(s)) from unnest(a) s),0) <= 100
+$$;
+alter table public.profiles
+  add constraint profile_name_len check (length(name) <= 100),
+  add constraint profile_bio_len check (length(bio) <= 1000),
+  add constraint profile_teach_len check (public.skills_ok(skills_teach)),
+  add constraint profile_learn_len check (public.skills_ok(skills_learn));
+alter table public.requests
+  add constraint request_skill_len check (length(skill) <= 100),
+  add constraint request_message_len check (length(message) <= 1000),
+  add constraint request_comment_len check (length(rating_comment) <= 1000);
+alter table public.messages add constraint message_len check (length(content) <= 2000);

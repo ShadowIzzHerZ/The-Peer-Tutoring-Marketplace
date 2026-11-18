@@ -84,7 +84,7 @@
         </div>
         <div id="chat-messages" class="flex-1 overflow-y-auto p-space-md space-y-2"></div>
         <form id="chat-form" class="flex items-center gap-2 p-space-md border-t border-outline-variant flex-shrink-0">
-          <input id="chat-input" type="text" autocomplete="off" placeholder="Type a message..." data-i18n-placeholder="messages.inputPlaceholder" class="flex-1 px-3 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"/>
+          <input id="chat-input" maxlength="2000" type="text" autocomplete="off" placeholder="Type a message..." data-i18n-placeholder="messages.inputPlaceholder" class="flex-1 px-3 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"/>
           <button type="submit" class="px-4 py-2.5 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-md text-label-md transition-all" data-i18n="messages.send">Send</button>
         </form>
       </div>

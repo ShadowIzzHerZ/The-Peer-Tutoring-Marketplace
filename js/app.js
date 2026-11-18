@@ -60,33 +60,10 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
-async function getAverageRating(userId) {
-  const { data, error } = await sb
-    .from('requests')
-    .select('rating')
-    .eq('to_user_id', userId)
-    .eq('status', 'completed')
-    .not('rating', 'is', null);
-
-  if (error || !data || data.length === 0) return null;
-  const sum = data.reduce((acc, r) => acc + r.rating, 0);
-  return sum / data.length;
-}
-
-// One query for every user's average rating: { userId: average }.
+// Every tutor's average rating from the tutor_ratings() function: { userId: average }.
 async function getAverageRatings() {
-  const { data } = await sb
-    .from('requests')
-    .select('to_user_id, rating')
-    .eq('status', 'completed')
-    .not('rating', 'is', null);
-  const sums = {};
-  (data || []).forEach((r) => {
-    const s = (sums[r.to_user_id] = sums[r.to_user_id] || { n: 0, total: 0 });
-    s.n += 1;
-    s.total += r.rating;
-  });
-  return Object.fromEntries(Object.entries(sums).map(([id, s]) => [id, s.total / s.n]));
+  const { data } = await sb.rpc('tutor_ratings');
+  return Object.fromEntries((data || []).map((r) => [r.to_user_id, Number(r.avg_rating)]));
 }
 
 // Turns a text input into a chip input: comma or Enter commits the typed skill as a removable block.
@@ -107,8 +84,8 @@ function setupChips(input, box, initial) {
     });
   };
   const commit = (text) => {
-    const t = text.trim();
-    if (t && !items.some((s) => s.toLowerCase() === t.toLowerCase())) items.push(t);
+    const t = text.trim().slice(0, 100);
+    if (t && items.length < 30 && !items.some((s) => s.toLowerCase() === t.toLowerCase())) items.push(t);
     render();
   };
   initial.forEach(commit);
